@@ -1,3 +1,130 @@
+/* Global styles */
+:root {
+    --background-color: #f2f2f2;
+    --color: white;
+    --indian-red: #f2545bff;
+    --amaranth-purple: #a93f55ff;
+    --gunmetal: #19323cff;
+    --mint-cream: #f3f7f0ff;
+    --rose-taupe: #8c5e58ff;
+  }
+  
 * {
+    margin: 0;
+    padding: 0;
     box-sizing: border-box;
-}
+    font-family: Arial, sans-serif;
+  }
+  
+  body {
+    background-color: var(--background-color);
+  }
+  
+  header {
+    background-color: var(--gunmetal);
+    color: var(--color);
+    padding: 20px;
+  }
+  
+  header h1 {
+    font-size: 36px;
+  }
+  
+  header h2 {
+    font-size: 24px;
+    font-style: italic;
+  }
+  
+  main {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  .actions {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  
+  .filters {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  
+  .actions button,
+  .filters button {
+    background-color:  var(--gunmetal);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    cursor: pointer;
+  }
+  
+  .todoList {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  
+  .todo {
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    width: 100%;
+    max-width: 400px;
+  }
+  
+  .todo #dueDate {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  .todo #name {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  .todo #importance {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  .todo #status {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  
+  .todo #status p {
+    margin-left: 10px;
+  }
+
+  
+  .btn {
+    background-color:  var(--gunmetal);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    cursor: pointer;
+  }
+   
+  footer {
+    background-color:  var(--gunmetal);
+    color: white;
+    padding: 20px;
+    text-align: center;
+  }
+  
+  footer p {
+    font-size: 14px;
+  }
+  
+ 

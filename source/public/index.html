@@ -8,31 +8,89 @@
   <link rel="stylesheet" href="styles/index.css">
 </head>
 <body>
+
   <header>
     <h1>Raceanizer</h1>
     <h2>ToDo App für Supermoto/Motocross Wochenende</h2>
   </header>
   <main>
-    <h2>Wochenendplanung</h2>
-    <ul>
-      <li>Unterkunft buchen</li>
-      <li>Anreise planen</li>
-      <li>Essen und Getränke organisieren</li>
-      <li>Ausrüstung vorbereiten</li>
-      <li>Sonstige Aufgaben</li>
-    </ul>
-    <h2>Training</h2>
-    <ul>
-      <li>Trainingsplan erstellen</li>
-      <li>Ausrüstung checken</li>
-      <li>Training durchführen</li>
-    </ul>
-    <h2>Nach dem Training</h2>
-    <ul>
-      <li>Ausrüstung reinigen</li>
-      <li>Motorrad warten</li>
-      <li>Sonstige Aufgaben</li>
-    </ul>
+    <div class="actions">
+      <button id="btn btn-primary" type="button">Neues Todo Erstellen</button>
+      <button id="btn btn-primary" type="button">Dark Mode</button>
+    </div>
+    <div class="filters">
+      <button id="btn btn-primary" type="button">Name</button>
+      <button id="btn btn-primary" type="button">by Due Date</button>
+      <button id="btn btn-primary" type="button">by Creation Date</button>
+      <button id="btn btn-primary" type="button">by Importance</button>
+      <button id="btn btn-primary" type="button">Filter Completed</button>
+    </div>
+    <div class="todoList">
+      <div class="todo">
+        <div id="dueDate">
+          <p>in a Day</p>
+        </div>
+        <div id="name">
+          <p> Geburi von Sarah</p>
+        </div>
+        <div id="importance">
+          <p>High</p>
+        </div>
+        <div id="status"> <input id="cbStatus" title="status" type="checkbox"/> <p>Done</p></div>
+        <div id="description"></div>
+        <div id="editButton">
+          <button type="button" class="btn btn-primary">Edit</button>
+        </div>
+      </div>
+      <div class="todo">
+        <div id="dueDate">
+          <p>in a Day</p>
+        </div>
+        <div id="name">
+          <p> Geburi von Sarah</p>
+        </div>
+        <div id="importance">
+          <p>High</p>
+        </div>
+        <div id="status"> <input id="cbStatus" title="status" type="checkbox"/> <p>Done</p></div>
+        <div id="description"></div>
+        <div id="editButton">
+          <button type="button" class="btn btn-primary">Edit</button>
+        </div>
+      </div>
+      <div class="todo">
+        <div id="dueDate">
+          <p>in a Day</p>
+        </div>
+        <div id="name">
+          <p> Geburi von Sarah</p>
+        </div>
+        <div id="importance">
+          <p>High</p>
+        </div>
+        <div id="status"> <input id="cbStatus" title="status" type="checkbox"/> <p>Done</p></div>
+        <div id="description"></div>
+        <div id="editButton">
+          <button type="button" class="btn btn-primary">Edit</button>
+        </div>
+      </div>
+      <div class="todo">
+        <div id="dueDate">
+          <p>in a Day</p>
+        </div>
+        <div id="name">
+          <p> Geburi von Sarah</p>
+        </div>
+        <div id="importance">
+          <p>High</p>
+        </div>
+        <div id="status"> <input id="cbStatus" title="status" type="checkbox"/> <p>Done</p></div>
+        <div id="description"></div>
+        <div id="editButton">
+          <button type="button" class="btn btn-primary">Edit</button>
+        </div>
+      </div>
+    </div>
   </main>
   <footer>
     <p>&copy; 2023 ToDo App für Supermoto/Motocross Wochenende</p>
