@@ -63,7 +63,7 @@
     cursor: pointer;
   }
   
-  .todoList {
+  .todos {
     display: flex;
     flex-wrap: wrap;
     gap: 20px;
@@ -75,7 +75,6 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     padding: 20px;
     width: 100%;
-    max-width: 400px;
   }
   
   .todo #dueDate {
