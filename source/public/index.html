@@ -1,99 +1,76 @@
 <!DOCTYPE html>
 <html lang="de">
-<head>
-  <meta charset="UTF-8">
-  <title>Raceanizer</title>
-  <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
-  <script src="scripts/index.js" type="module"></script>
-  <link rel="stylesheet" href="styles/index.css">
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <title>SimpleDo</title>
 
-  <header>
-    <h1>Raceanizer</h1>
-    <h2>ToDo App für Supermoto/Motocross Wochenende</h2>
-  </header>
-  <main>
-    <div class="actions">
-      <button id="btn btn-primary" type="button">Neues Todo Erstellen</button>
-      <button id="btn btn-primary" type="button">Dark Mode</button>
-    </div>
-    <div class="filters">
-      <button id="btn btn-primary" type="button">Name</button>
-      <button id="btn btn-primary" type="button">by Due Date</button>
-      <button id="btn btn-primary" type="button">by Creation Date</button>
-      <button id="btn btn-primary" type="button">by Importance</button>
-      <button id="btn btn-primary" type="button">Filter Completed</button>
-    </div>
-    <div class="todoList">
-      <div class="todo">
-        <div id="dueDate">
-          <p>in a Day</p>
-        </div>
-        <div id="name">
-          <p> Geburi von Sarah</p>
-        </div>
-        <div id="importance">
-          <p>High</p>
-        </div>
-        <div id="status"> <input id="cbStatus" title="status" type="checkbox"/> <p>Done</p></div>
-        <div id="description"></div>
-        <div id="editButton">
-          <button type="button" class="btn btn-primary">Edit</button>
-        </div>
+    <!-- Scripts -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"
+      defer
+    ></script>
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="styles/index.css" />
+
+    <script
+      src="js/controllers/todo-controller.js"
+      type="module"
+      defer
+    ></script>
+
+    <!-- Handlebar Templates -->
+    <script id="todo-list-template" type="text/x-handlebars-template">
+      <div class='todos'>
+        {{#each todos}}
+          <div class='todo'>
+            <div id='dueDate'>
+              <p>{{dueDate}}</p>
+            </div>
+            <div id='name'>
+              <p>{{name}}</p>
+            </div>
+            <div id='importance'>
+              <p>{{importance}}</p>
+            </div>
+            <div id='status'>
+              <input id='cbStatus' title='status' type='checkbox' />
+              <p>Done</p>
+            </div>
+            <div id='description'>{{description}}</div>
+            <div id='editButton'>
+              <button
+                type='button'
+                class='btn btn-primary'
+                data-todo-id='{{id}}'
+              >Edit</button>
+            </div>
+          </div>
+        {{/each}}
       </div>
-      <div class="todo">
-        <div id="dueDate">
-          <p>in a Day</p>
-        </div>
-        <div id="name">
-          <p> Geburi von Sarah</p>
-        </div>
-        <div id="importance">
-          <p>High</p>
-        </div>
-        <div id="status"> <input id="cbStatus" title="status" type="checkbox"/> <p>Done</p></div>
-        <div id="description"></div>
-        <div id="editButton">
-          <button type="button" class="btn btn-primary">Edit</button>
-        </div>
+    </script>
+  </head>
+  <body>
+    <header>
+      <h1>SimpleDo</h1>
+      <h2>Die einfache Notitzapp</h2>
+    </header>
+    <main>
+      <div class="actions">
+        <button id="btn btn-primary" type="button">Neues Todo Erstellen</button>
+        <button id="btn btn-primary" type="button">Dark Mode</button>
       </div>
-      <div class="todo">
-        <div id="dueDate">
-          <p>in a Day</p>
-        </div>
-        <div id="name">
-          <p> Geburi von Sarah</p>
-        </div>
-        <div id="importance">
-          <p>High</p>
-        </div>
-        <div id="status"> <input id="cbStatus" title="status" type="checkbox"/> <p>Done</p></div>
-        <div id="description"></div>
-        <div id="editButton">
-          <button type="button" class="btn btn-primary">Edit</button>
-        </div>
+      <div class="filters">
+        <button id="btn btn-primary" type="button">Name</button>
+        <button id="btn btn-primary" type="button">by Due Date</button>
+        <button id="btn btn-primary" type="button">by Creation Date</button>
+        <button id="btn btn-primary" type="button">by Importance</button>
+        <button id="btn btn-primary" type="button">Filter Completed</button>
       </div>
-      <div class="todo">
-        <div id="dueDate">
-          <p>in a Day</p>
-        </div>
-        <div id="name">
-          <p> Geburi von Sarah</p>
-        </div>
-        <div id="importance">
-          <p>High</p>
-        </div>
-        <div id="status"> <input id="cbStatus" title="status" type="checkbox"/> <p>Done</p></div>
-        <div id="description"></div>
-        <div id="editButton">
-          <button type="button" class="btn btn-primary">Edit</button>
-        </div>
-      </div>
-    </div>
-  </main>
-  <footer>
-    <p>&copy; 2023 ToDo App für Supermoto/Motocross Wochenende</p>
-  </footer>
-</body>
+      <section class="card" id="todo-container"></section>
+    </main>
+    <footer>
+      <p>&copy; 2023 Die einfache Notitzapp</p>
+    </footer>
+  </body>
 </html>
