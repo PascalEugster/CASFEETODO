@@ -3,23 +3,35 @@ import Todo from './todo.js';
 
 export default class TodoService {
     constructor(storage) {
-        this.storage = storage || new TodoStorage();
-        this.todos = [ ];
+      this.storage = storage || new TodoStorage();
+      this.todos = [];
+      this.sortStatus = {
+        name: 'ascending',
+        dueDate: 'ascending',
+        creationDate: 'ascending',
+        importance: 'ascending',
+        status: 'ascending'
+      };
     }
 
     loadData() {
-        this.todos = this.storage.getAll().map(f => new Todo(f.id, f.name, f.status, f.description, f.importance, f.creationDate, f.dueDate));
-        
-        // initial data seed
-        if (this.todos.length === 0) { // initial data seed
-            this.todos.push(new Todo(0, 'bring Milk', 0, 'from the store', 1, new Date(), new Date()));
-            this.todos.push(new Todo(1, 'bring Bread', 0, 'from the store', 1, new Date(), new Date()));
-            this.todos.push(new Todo(2, 'bring Eggs', 0, 'from the store', 1, new Date(), new Date()));
-            this.todos.push(new Todo(3, 'bring Butter', 0, 'from the store', 1, new Date(), new Date()));
-            this.todos.push(new Todo(4, 'bring Cheese', 0, 'from the store', 1, new Date(), new Date()));
-            this.save();
+        const storedTodos = this.storage.getAll().map(f => new Todo(f.id, f.name, f.status, f.description, f.importance, new Date(f.creationDate), new Date(f.dueDate)));
+        this.todos = storedTodos.length > 0 ? storedTodos : this.getInitialData();
+      }
+      
+      getInitialData() {
+        const initialData = [
+          { id: 0, name: 'bring Milk', status: 0, description: 'from the store', importance: 1, creationDate: new Date(), dueDate: new Date() },
+          { id: 1, name: 'bring Bread', status: 0, description: 'from the store', importance: 3, creationDate: new Date(), dueDate: new Date() },
+          { id: 2, name: 'bring Eggs', status: 0, description: 'from the store', importance: 2, creationDate: new Date(), dueDate: new Date() },
+          { id: 3, name: 'bring Butter', status: 0, description: 'from the store', importance: 5, creationDate: new Date(), dueDate: new Date() },
+          { id: 4, name: 'bring Cheese', status: 0, description: 'from the store', importance: 3, creationDate: new Date(), dueDate: new Date() }
+        ];
+      
+        this.storage.update(initialData);
+        return initialData.map(f => new Todo(f.id, f.name, f.status, f.description, f.importance, new Date(f.creationDate), new Date(f.dueDate)));
         }
-    }
+
 
     save() {
         this.storage.update(this.todos.map(f => f.toJSON()));
