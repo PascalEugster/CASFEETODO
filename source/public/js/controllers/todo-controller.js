@@ -60,9 +60,10 @@ export default class TodoController {
         break;
 
       case 'status':
-        sortedTodos = todoService.todos.filter(
-          (todo) => todo.status === 'completed'
-        );
+        sortedTodos = todoService.todos.slice().sort((a, b) => {
+          return a.status - b.status;
+        });
+
         break;
 
       default:
