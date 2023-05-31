@@ -2,41 +2,160 @@ import TodoStorage from './data/todo-storage.js';
 import Todo from './todo.js';
 
 export default class TodoService {
-    constructor(storage) {
-      this.storage = storage || new TodoStorage();
-      this.todos = [];
-      this.sortStatus = {
-        name: 'ascending',
-        dueDate: 'ascending',
-        creationDate: 'ascending',
-        importance: 'ascending',
-        status: 'ascending'
-      };
+  constructor(storage) {
+    this.storage = storage || new TodoStorage();
+    this.todos = [];
+    this.sortStatus = {
+      name: 'ascending',
+      dueDate: 'ascending',
+      creationDate: 'ascending',
+      importance: 'ascending',
+      status: 'ascending',
+    };
+  }
+
+  loadData() {
+    const storedTodos = this.storage
+      .getAll()
+      .map(
+        (f) =>
+          new Todo(
+            f.id,
+            f.name,
+            f.status,
+            f.description,
+            f.importance,
+            new Date(f.creationDate),
+            new Date(f.dueDate)
+          )
+      );
+    this.todos = storedTodos.length > 0 ? storedTodos : this.getInitialData();
+  }
+
+  getInitialData() {
+    const currentDate = Date.now();
+    const oneDayInMilliseconds = 86400000;
+  
+    const initialData = [
+      {
+        id: `${currentDate}-0`,
+        name: 'bring Milk',
+        status: 0,
+        description: 'from the store',
+        importance: 1,
+        creationDate: currentDate,
+        dueDate: currentDate + oneDayInMilliseconds, 
+      },
+      {
+        id: `${currentDate + oneDayInMilliseconds}-1`,
+        name: 'bring Bread',
+        status: 0,
+        description: 'from the store',
+        importance: 3,
+        creationDate: currentDate + oneDayInMilliseconds,
+        dueDate: currentDate + 2 * oneDayInMilliseconds, 
+      },
+      {
+        id: `${currentDate + 2 * oneDayInMilliseconds}-2`,
+        name: 'bring Eggs',
+        status: 0,
+        description: 'from the store',
+        importance: 2,
+        creationDate: currentDate + 2 * oneDayInMilliseconds, 
+        dueDate: currentDate + 3 * oneDayInMilliseconds, 
+      },
+      {
+        id: `${currentDate + 3 * oneDayInMilliseconds}-3`,
+        name: 'bring Butter',
+        status: 0,
+        description: 'from the store',
+        importance: 5,
+        creationDate: currentDate + 3 * oneDayInMilliseconds,
+        dueDate: currentDate + 4 * oneDayInMilliseconds,
+      },
+      {
+        id: `${currentDate + 4 * oneDayInMilliseconds}-4`,
+        name: 'bring Cheese',
+        status: 0,
+        description: 'from the store',
+        importance: 3,
+        creationDate: currentDate + 4 * oneDayInMilliseconds,
+        dueDate: currentDate + 5 * oneDayInMilliseconds, 
+      },
+    ];
+  
+    this.storage.update(initialData);
+  
+    return initialData.map(
+      (f) =>
+        new Todo(
+          f.id,
+          f.name,
+          f.status,
+          f.description,
+          f.importance,
+          new Date(f.creationDate),
+          new Date(f.dueDate)
+        )
+    );
+  }
+
+  save() {
+    this.storage.update(this.todos.map((f) => f.toJSON()));
+  }
+
+  createTodo(name, description, dueDate, importance) {
+    const id = this.generateTodoId();
+    const todo = new Todo(
+      id,
+      name,
+      'pending',
+      description,
+      importance,
+      new Date(),
+      new Date(dueDate)
+    );
+
+    this.todos.push(todo);
+    this.save();
+  }
+
+  getTodoById(id) {
+    return this.todos.find((todo) => todo.id === id);
+  }
+
+  updateTodoStatus(todoId, status) {
+    const todo = this.todos.find((desiredTodo) => desiredTodo.id === todoId);
+    if (todo) {
+      todo.status = status;
+      this.save();
     }
+  }
 
-    loadData() {
-        const storedTodos = this.storage.getAll().map(f => new Todo(f.id, f.name, f.status, f.description, f.importance, new Date(f.creationDate), new Date(f.dueDate)));
-        this.todos = storedTodos.length > 0 ? storedTodos : this.getInitialData();
-      }
-      
-      getInitialData() {
-        const initialData = [
-          { id: 0, name: 'bring Milk', status: 0, description: 'from the store', importance: 1, creationDate: new Date(), dueDate: new Date() },
-          { id: 1, name: 'bring Bread', status: 0, description: 'from the store', importance: 3, creationDate: new Date(), dueDate: new Date() },
-          { id: 2, name: 'bring Eggs', status: 0, description: 'from the store', importance: 2, creationDate: new Date(), dueDate: new Date() },
-          { id: 3, name: 'bring Butter', status: 0, description: 'from the store', importance: 5, creationDate: new Date(), dueDate: new Date() },
-          { id: 4, name: 'bring Cheese', status: 0, description: 'from the store', importance: 3, creationDate: new Date(), dueDate: new Date() }
-        ];
-      
-        this.storage.update(initialData);
-        return initialData.map(f => new Todo(f.id, f.name, f.status, f.description, f.importance, new Date(f.creationDate), new Date(f.dueDate)));
-        }
-
-
-    save() {
-        this.storage.update(this.todos.map(f => f.toJSON()));
+  updateTodo(todoId, updatedTodo) {
+    const todo = this.todos.find((desiredTodo) => desiredTodo.id === todoId);
+    if (todo) {
+      Object.assign(todo, updatedTodo);
+      this.save();
+      return true; 
     }
+    return false;
+  }
 
+
+  deleteTodo(todoId) {
+    const todoIndex = this.todos.findIndex((todo) => todo.id === todoId);
+    if (todoIndex !== -1) {
+      this.todos.splice(todoIndex, 1);
+      this.save();
+    }
+  }
+
+  generateTodoId() {
+    const currentDate = Date.now().toString();
+    const todoCount = this.todos.length;
+    return `${currentDate}-${todoCount}`;
+  }
 }
 
 export const todoService = new TodoService();

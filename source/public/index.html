@@ -20,57 +20,35 @@
     ></script>
 
     <!-- Handlebar Templates -->
-    <script id="todo-list-template" type="text/x-handlebars-template">
-      <div class='todos'>
-        {{#each todos}}
-          <div class='todo'>
-            <div id='dueDate'>
-              <p>{{dueDate}}</p>
-            </div>
-            <div id='name'>
-              <p>{{name}}</p>
-            </div>
-            <div id='importance'>
-              <p>{{importance}}</p>
-            </div>
-            <div id='status'>
-              <input id='cbStatus' title='status' type='checkbox' />
-              <p>Done</p>
-            </div>
-            <div id='description'>{{description}}</div>
-            <div id='editButton'>
-              <button
-                type='button'
-                class='btn btn-primary'
-                data-todo-id='{{id}}'
-              >Edit</button>
-            </div>
-          </div>
-        {{/each}}
-      </div>
-    </script>
+    <script id="todo-list" type="text/x-handlebars-template"></script>
   </head>
   <body>
-    <header>
-      <h1>SimpleDo</h1>
-      <h2>Die einfache Notitzapp</h2>
-    </header>
+    <div id="header-container"></div>
     <main>
       <div class="actions">
-        <button id="btn btn-primary" type="button">Neues Todo Erstellen</button>
-        <button id="btn btn-primary" type="button">Dark Mode</button>
+        <button id="btnCreateTodo" class="btn btn-primary" type="button">Neues Todo Erstellen</button>
+        <button id="btnDarkMode" class="btn btn-primary" type="button">Dark Mode</button>
       </div>
       <div class="filters">
-        <button id="btn btn-primary" type="button" data-sort="Name">Name</button>
-        <button id="btn btn-primary" type="button" data-sort="dueDate">by Due Date</button>
-        <button id="btn btn-primary" type="button" data-sort="creationDate">by Creation Date</button>
-        <button id="btn btn-primary" type="button" data-sort="Importance">by Importance</button>
-        <button id="btn btn-primary" type="button" data-sort="status">Filter Completed</button>
+        <button id="btnName" class="btn btn-primary" type="button" data-sort="Name">
+          Name
+        </button>
+        <button id="btnDueDate" class="btn btn-primary" type="button" data-sort="dueDate">
+          Fälligkeitsdatum
+        </button>
+        <button id="btnCreationDate" class="btn btn-primary" type="button" data-sort="creationDate">
+          Erstelldatum
+        </button>
+        <button class="btn btn-primary" type="button" data-sort="Importance">
+          Wichtigkeit
+        </button>
+        <button class="btn btn-primary" type="button" data-sort="status">
+          Status
+        </button>
       </div>
       <section class="card" id="todo-container"></section>
+      <section id="create-todo-container"></section>
     </main>
-    <footer>
-      <p>&copy; 2023 Die einfache Notitzapp</p>
-    </footer>
+    <div id="footer-container"></div>
   </body>
 </html>

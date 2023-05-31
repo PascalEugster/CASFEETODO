@@ -1,129 +1,217 @@
-/* Global styles */
 :root {
-    --background-color: #f2f2f2;
-    --color: white;
-    --indian-red: #f2545bff;
-    --amaranth-purple: #a93f55ff;
-    --gunmetal: #19323cff;
-    --mint-cream: #f3f7f0ff;
-    --rose-taupe: #8c5e58ff;
-  }
-  
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: Arial, sans-serif;
-  }
-  
-  body {
-    background-color: var(--background-color);
-  }
-  
-  header {
-    background-color: var(--gunmetal);
-    color: var(--color);
-    padding: 20px;
-  }
-  
-  header h1 {
-    font-size: 36px;
-  }
-  
-  header h2 {
-    font-size: 24px;
-    font-style: italic;
-  }
-  
-  main {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
-  }
-  
-  .actions {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 20px;
-  }
-  
-  .filters {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 20px;
-  }
-  
-  .actions button,
-  .filters button {
-    background-color:  var(--gunmetal);
-    color: white;
-    border: none;
-    border-radius: 5px;
-    padding: 10px;
-    cursor: pointer;
-  }
-  
-  .todos {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-  }
-  
-  .todo {
-    background-color: white;
-    border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    padding: 20px;
-    width: 100%;
-  }
-  
-  .todo #dueDate {
-    font-size: 18px;
-    font-weight: bold;
-    margin-bottom: 10px;
-  }
-  
-  .todo #name {
-    font-size: 24px;
-    font-weight: bold;
-    margin-bottom: 10px;
-  }
-  
-  .todo #importance {
-    font-size: 18px;
-    font-weight: bold;
-    margin-bottom: 10px;
-  }
-  
-  .todo #status {
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
-  }
-  
-  .todo #status p {
-    margin-left: 10px;
-  }
+  --background-color: #f2f2f2;
+  --color: white;
+  --gunmetal: #19323cff;
+}
 
-  
-  .btn {
-    background-color:  var(--gunmetal);
-    color: white;
-    border: none;
-    border-radius: 5px;
-    padding: 10px;
-    cursor: pointer;
-  }
-   
-  footer {
-    background-color:  var(--gunmetal);
-    color: white;
-    padding: 20px;
-    text-align: center;
-  }
-  
-  footer p {
-    font-size: 14px;
-  }
-  
- 
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+body {
+  background-color: var(--background-color);
+}
+
+header {
+  background-color: var(--gunmetal);
+  color: var(--color);
+  padding: 20px;
+}
+
+header h1 {
+  font-size: 36px;
+}
+
+header h2 {
+  font-size: 24px;
+  font-style: italic;
+}
+
+main {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.btn {
+  background-color: var(--gunmetal);
+  color: var(--color);
+  border: none;
+  border-radius: 5px;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background-color: #19323cff;
+  color: white;
+}
+
+.btn:hover {
+  background-color: #154d7cff;
+}
+
+.btn-primary:hover {
+  background-color: #154d7cff;
+}
+
+.actions,
+.filters {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.actions button,
+.filters button {
+  background-color: var(--gunmetal);
+  color: var(--color);
+  border: none;
+  border-radius: 5px;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.todos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.todo {
+  background-color: white;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  padding: 20px;
+  width: 100%;
+}
+
+.todo > * {
+  margin-bottom: 10px;
+}
+
+.todo-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.todo-title {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.todo-details {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+}
+
+.todo-description {
+  font-size: 14px;
+}
+
+.todo-status {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.todo-done-button {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: background-color 0.3s ease;
+}
+
+.todo-done-button.not-done {
+  background-color: #19323cff;
+}
+
+.todo-done-button:hover {
+  background-color: #45a049;
+}
+
+.todo-edit-button {
+  background-color: var(--gunmetal);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: background-color 0.3s ease;
+}
+
+.todo-edit-button:hover {
+  background-color: #154d7cff;
+}
+
+#create-todo {
+  background-color: white;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+#create-todo h2 {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+#create-todo button#btnBack {
+  background-color: var(--gunmetal);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+#create-todo form {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+
+#create-todo input,
+#create-todo select {
+  padding: 10px;
+  border: 1px solid var(--gunmetal);
+  border-radius: 5px;
+}
+
+#create-todo input[type="date"] {
+  appearance: none;
+}
+
+#create-todo button[type="submit"] {
+  background-color: var(--gunmetal);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px;
+  cursor: pointer;
+}
+
+footer {
+  background-color: var(--gunmetal);
+  color: var(--color);
+  padding: 20px;
+  text-align: center;
+}
+
+footer p {
+  font-size: 14px;
+}
