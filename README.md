@@ -1,7 +1,8 @@
 
 # Race Todo's
 
-This WebApp is all about Todo's for a raceweekend and whats needed before, during and after the race. You can easily loose sight on your todo's when beeing on a raceweeknd, which can definetly ruin your race. Our goal is to help you keep your focus and minimize the time spended on planning. 
+This WebApp is all about Simple Todo's and just simple Todo's. No Overhead. No fancy functions.
+Focus on the real thing let the things holding you off behind.
 
 ## Authors
 
