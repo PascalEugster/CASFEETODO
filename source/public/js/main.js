@@ -3,14 +3,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const footerContainer = document.getElementById('footer-container');
   
     // Lade den Header
-    fetch('header.html')
+    fetch('views/header.html')
       .then(response => response.text())
       .then(html => {
         headerContainer.innerHTML = html;
       });
   
     // Lade den Footer
-    fetch('footer.html')
+    fetch('views/footer.html')
       .then(response => response.text())
       .then(html => {
         footerContainer.innerHTML = html;

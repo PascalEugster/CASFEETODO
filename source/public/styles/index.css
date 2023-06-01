@@ -1,7 +1,21 @@
 :root {
   --background-color: #f2f2f2;
+  --text-color: #232830;
   --color: white;
   --gunmetal: #19323cff;
+  --holy-blue: #19323cff;
+  --holy-blue-lighter: #11426b;
+  --healty-green: #4caf50;
+}
+
+.dark-mode {
+  --background-color: #222;
+  --color: #232830;
+  --text-color:white;
+  --gunmetal: #415070;
+  --holy-blue: #19323cff;
+  --holy-blue-lighter: #11426b;
+  --healty-green: #4caf50;
 }
 
 * {
@@ -16,8 +30,8 @@ body {
 }
 
 header {
-  background-color: var(--gunmetal);
-  color: var(--color);
+  background-color: #2d3340;
+  color: white;
   padding: 20px;
 }
 
@@ -30,6 +44,17 @@ header h2 {
   font-style: italic;
 }
 
+footer {
+  background-color: #2d3340;
+  color: white;
+  padding: 20px;
+  text-align: center;
+}
+
+footer p {
+  font-size: 14px;
+}
+
 main {
   max-width: 800px;
   margin: 0 auto;
@@ -38,7 +63,7 @@ main {
 
 .btn {
   background-color: var(--gunmetal);
-  color: var(--color);
+  color: white;
   border: none;
   border-radius: 5px;
   padding: 10px;
@@ -46,16 +71,16 @@ main {
 }
 
 .btn-primary {
-  background-color: #19323cff;
+  background-color: var(--gunmetal);
   color: white;
 }
 
 .btn:hover {
-  background-color: #154d7cff;
+  background-color: var(--holy-blue);
 }
 
 .btn-primary:hover {
-  background-color: #154d7cff;
+  background-color: var(--holy-blue);
 }
 
 .actions,
@@ -67,8 +92,8 @@ main {
 
 .actions button,
 .filters button {
-  background-color: var(--gunmetal);
-  color: var(--color);
+  background-color: var(--holy-blue);
+  color: white;
   border: none;
   border-radius: 5px;
   padding: 10px;
@@ -82,7 +107,8 @@ main {
 }
 
 .todo {
-  background-color: white;
+  background-color: var(--color);
+  color: var(--text-color);
   border-radius: 5px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   padding: 20px;
@@ -121,22 +147,22 @@ main {
   align-items: center;
 }
 
-.todo-done-button {
-  background-color: #4caf50;
+.todo-status-button {
+  background-color: var(--healty-green);
   color: white;
   border: none;
   border-radius: 5px;
-  padding: 5px 10px;
+  padding: 15px 20px;
   cursor: pointer;
-  font-size: 12px;
+  font-size: 13px;
   transition: background-color 0.3s ease;
 }
 
-.todo-done-button.not-done {
-  background-color: #19323cff;
+.todo-status-button.not-done {
+  background-color: var(--gunmetal);
 }
 
-.todo-done-button:hover {
+.todo-status-button:hover {
   background-color: #45a049;
 }
 
@@ -152,7 +178,7 @@ main {
 }
 
 .todo-edit-button:hover {
-  background-color: #154d7cff;
+  background-color: var(--holy-blue-lighter);
 }
 
 #create-todo {
@@ -192,11 +218,11 @@ main {
   border-radius: 5px;
 }
 
-#create-todo input[type="date"] {
+#create-todo input[type='date'] {
   appearance: none;
 }
 
-#create-todo button[type="submit"] {
+#create-todo button[type='submit'] {
   background-color: var(--gunmetal);
   color: white;
   border: none;
@@ -205,13 +231,3 @@ main {
   cursor: pointer;
 }
 
-footer {
-  background-color: var(--gunmetal);
-  color: var(--color);
-  padding: 20px;
-  text-align: center;
-}
-
-footer p {
-  font-size: 14px;
-}
