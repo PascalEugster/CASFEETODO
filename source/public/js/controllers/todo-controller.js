@@ -1,5 +1,14 @@
 import { todoService } from '../services/todo-service.js';
 
+const buttonTranslations = {
+  btnName: 'Name',
+  btnDueDate: 'Fälligkeitsdatum',
+  btnCreationDate: 'Erstellungsdatum',
+  btnImportance: 'Wichtigkeit',
+  btnStatus: 'Status',
+  // Weitere Übersetzungen hier hinzufügen
+};
+
 export default class TodoController {
   constructor() {
     this.todoTemplateCompiled = Handlebars.compile(
@@ -81,23 +90,28 @@ export default class TodoController {
     sortButtons.forEach((button) => {
       const buttonSortBy = button.getAttribute('data-sort');
       if (buttonSortBy !== sortBy) {
-        button.innerHTML = buttonSortBy;
+        button.innerHTML = this.translateButton(button.id);
       }
     });
 
     const selectedButton = document.querySelector(
       `.filters button[data-sort="${sortBy}"]`
     );
+    const buttonName = this.translateButton(selectedButton.id);
     if (sortStatus === 'ascending') {
-      selectedButton.innerHTML = `${sortBy} ▲`;
+      selectedButton.innerHTML = `${buttonName} ▲`;
     } else {
-      selectedButton.innerHTML = `${sortBy} ▼`;
+      selectedButton.innerHTML = `${buttonName} ▼`;
     }
 
     this.todoTemplateContainer.innerHTML = this.todoTemplateCompiled(
       { todos: sortedTodos },
       { allowProtoPropertiesByDefault: true }
     );
+  }
+
+  translateButton(buttonId) {
+    return buttonTranslations[buttonId];
   }
 
   initEventHandlers() {
@@ -254,7 +268,6 @@ export default class TodoController {
     const htmlElement = document.querySelector('html');
     htmlElement.classList.toggle('dark-mode');
   }
-  
 
   renderTodoView(todos) {
     this.todoTemplateContainer.innerHTML = this.todoTemplateCompiled(
