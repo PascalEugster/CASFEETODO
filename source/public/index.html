@@ -11,9 +11,12 @@
     ></script>
 
     <!-- Stylesheets -->
-    <script  src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js" type="module" defer></script>
+    <script
+      src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"
+      type="module"
+      defer
+    ></script>
     <link rel="stylesheet" href="styles/index.css" />
-    
 
     <script
       src="js/controllers/todo-controller.js"
@@ -21,11 +24,7 @@
       defer
     ></script>
 
-    <script
-    src="js/main.js"
-    type="module"
-    defer
-  ></script>
+    <script src="js/main.js" type="module" defer></script>
 
     <!-- Handlebar Templates -->
     <script id="todo-list" type="text/x-handlebars-template"></script>
@@ -34,17 +33,36 @@
     <div id="header-container"></div>
     <main>
       <div class="actions">
-        <button id="btnCreateTodo" class="btn btn-primary" type="button">Neues Todo erstellen</button>
-        <button id="btnDarkMode" class="btn btn-primary" type="button">Dark Mode</button>
+        <button id="btnCreateTodo" class="btn btn-primary" type="button">
+          <ion-icon name="create-outline"></ion-icon>Neues Todo erstellen
+        </button>
+        <button id="btnDarkMode" class="btn btn-primary" type="button">
+          Dark Mode
+        </button>
       </div>
       <div class="filters">
-        <button id="btnName" class="btn btn-primary" type="button" data-sort="name">
+        <button
+          id="btnName"
+          class="btn btn-primary"
+          type="button"
+          data-sort="name"
+        >
           Name
         </button>
-        <button id="btnDueDate" class="btn btn-primary" type="button" data-sort="dueDate">
+        <button
+          id="btnDueDate"
+          class="btn btn-primary"
+          type="button"
+          data-sort="dueDate"
+        >
           Fälligkeitsdatum
         </button>
-        <button id="btnCreationDate" class="btn btn-primary" type="button" data-sort="creationDate">
+        <button
+          id="btnCreationDate"
+          class="btn btn-primary"
+          type="button"
+          data-sort="creationDate"
+        >
           Erstelldatum
         </button>
         <button class="btn btn-primary" type="button" data-sort="importance">

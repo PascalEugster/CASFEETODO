@@ -11,7 +11,7 @@
 .dark-mode {
   --background-color: #222;
   --color: #232830;
-  --text-color:white;
+  --text-color: white;
   --gunmetal: #415070;
   --holy-blue: #19323cff;
   --holy-blue-lighter: #11426b;
@@ -73,6 +73,12 @@ main {
 .btn-primary {
   background-color: var(--gunmetal);
   color: white;
+  transition: background-color 0.3s ease;
+}
+
+.btn-primary ion-icon {
+  margin-right: 10px;
+  font-size: 20px;
 }
 
 .btn:hover {
@@ -88,16 +94,6 @@ main {
   display: flex;
   justify-content: space-between;
   margin-bottom: 20px;
-}
-
-.actions button,
-.filters button {
-  background-color: var(--holy-blue);
-  color: white;
-  border: none;
-  border-radius: 5px;
-  padding: 10px;
-  cursor: pointer;
 }
 
 .todos {
@@ -230,4 +226,3 @@ main {
   padding: 10px;
   cursor: pointer;
 }
-
