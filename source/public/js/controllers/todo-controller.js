@@ -283,6 +283,11 @@ export default class TodoController {
     }
   }
 
+  formatDate(date) {
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    return date.toLocaleDateString(undefined, options);
+  }
+
   setFilterStatus() {
     const filterStatusButton = document.getElementById('btnFilterStatus');
 
@@ -302,10 +307,17 @@ export default class TodoController {
         (todo) => todo.status === false || todo.status === 0
       );
     }
+
+    const formattedTodos = filteredTodos.map((todo) => ({
+      ...todo,
+      dueDate: this.formatDate(todo.dueDate),
+    }));
+
     this.todoTemplateContainer.innerHTML = this.todoTemplateCompiled(
-      { todos: filteredTodos },
+      { todos: formattedTodos },
       { allowProtoPropertiesByDefault: true }
     );
+    console.log('renderTodoView');
   }
 
   initialize() {
