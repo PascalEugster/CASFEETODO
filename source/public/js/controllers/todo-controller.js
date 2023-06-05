@@ -1,11 +1,11 @@
 import { todoService } from '../services/todo-service.js';
 
 const buttonTranslations = {
-  btnName: 'Name',
-  btnDueDate: 'Fälligkeitsdatum',
-  btnCreationDate: 'Erstellungsdatum',
-  btnImportance: 'Wichtigkeit',
-  btnStatus: 'Status',
+  btnSortName: 'Name',
+  btnSortDueDate: 'Fälligkeitsdatum',
+  btnSortCreationDate: 'Erstellungsdatum',
+  btnSortImportance: 'Wichtigkeit',
+  btnSortStatus: 'Status',
   // Weitere Übersetzungen hier hinzufügen
 };
 
@@ -14,6 +14,7 @@ export default class TodoController {
     this.todoTemplateCompiled = Handlebars.compile(
       document.getElementById('todo-list').innerHTML
     );
+    this.filterStatus = false;
 
     this.todoTemplateContainer = document.getElementById('todo-container');
     this.createTodoContainer = document.getElementById('create-todo-container');
@@ -22,7 +23,7 @@ export default class TodoController {
     this.initEventHandlers();
   }
 
-  showtodos() {
+  showTodos() {
     this.todoTemplateContainer.innerHTML = this.todoTemplateCompiled(
       { todos: todoService.todos },
       { allowProtoPropertiesByDefault: true }
@@ -86,7 +87,7 @@ export default class TodoController {
       todoService.sortStatus[sortBy] = 'ascending';
     }
 
-    const sortButtons = document.querySelectorAll('.filters button');
+    const sortButtons = document.querySelectorAll('.sortButtons button');
     sortButtons.forEach((button) => {
       const buttonSortBy = button.getAttribute('data-sort');
       if (buttonSortBy !== sortBy) {
@@ -95,7 +96,7 @@ export default class TodoController {
     });
 
     const selectedButton = document.querySelector(
-      `.filters button[data-sort="${sortBy}"]`
+      `.sortButtons button[data-sort="${sortBy}"]`
     );
     const buttonName = this.translateButton(selectedButton.id);
     if (sortStatus === 'ascending') {
@@ -118,6 +119,9 @@ export default class TodoController {
     const btnDarkMode = document.getElementById('btnDarkMode');
     btnDarkMode.addEventListener('click', this.toggleDarkMode);
 
+    const btnFilterStatus = document.getElementById('btnFilterStatus');
+    btnFilterStatus.addEventListener('click', this.setFilterStatus.bind(this));
+
     const createTodoButton = document.getElementById('btnCreateTodo');
     createTodoButton.addEventListener('click', () => {
       this.showCreateTodoForm();
@@ -133,7 +137,7 @@ export default class TodoController {
       }
     });
 
-    const sortButtons = document.querySelectorAll('.filters button');
+    const sortButtons = document.querySelectorAll('.sortButtons button');
     sortButtons.forEach((button) => {
       const sortBy = button.getAttribute('data-sort');
       button.addEventListener('click', () => {
@@ -205,6 +209,9 @@ export default class TodoController {
         createButton.addEventListener('click', () => {
           this.createTodo();
         });
+      })
+      .catch((error) => {
+        console.error('Template not found: ', error);
       });
   }
 
@@ -269,9 +276,27 @@ export default class TodoController {
     htmlElement.classList.toggle('dark-mode');
   }
 
+  setFilterStatus() {
+    this.filterStatus = !this.filterStatus;
+
+    const filterStatusButton = document.getElementById('btnFilterStatus');
+
+    if (this.filterStatus) {
+      filterStatusButton.textContent = 'Erledigte ausblenden';
+    } else {
+      filterStatusButton.textContent = 'Erledigte anzeigen';
+    }
+
+    this.renderTodoView(todoService.todos);
+  }
+
   renderTodoView(todos) {
+    let filteredTodos = todos;
+    if (this.filterStatus) {
+      filteredTodos = todos.filter((todo) => todo.status === 0);
+    }
     this.todoTemplateContainer.innerHTML = this.todoTemplateCompiled(
-      { todos },
+      { todos: filteredTodos },
       { allowProtoPropertiesByDefault: true }
     );
   }

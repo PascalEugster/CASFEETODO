@@ -36,13 +36,17 @@
         <button id="btnCreateTodo" class="btn btn-primary" type="button">
           <ion-icon name="create-outline"></ion-icon>Neues Todo erstellen
         </button>
+        <button id="btnFilterStatus" class="btn btn-primary" type="button">
+          Erledigte anzeigen
+        </button>
         <button id="btnDarkMode" class="btn btn-primary" type="button">
           Dark Mode
         </button>
       </div>
-      <div class="filters">
+      <div class="sortButtons">
+        <label for="sortButtons">Sortieren nach:</label>
         <button
-          id="btnName"
+          id="btnSortName"
           class="btn btn-primary"
           type="button"
           data-sort="name"
@@ -50,7 +54,7 @@
           Name
         </button>
         <button
-          id="btnDueDate"
+          id="btnSortDueDate"
           class="btn btn-primary"
           type="button"
           data-sort="dueDate"
@@ -58,7 +62,7 @@
           Fälligkeitsdatum
         </button>
         <button
-          id="btnCreationDate"
+          id="btnSortCreationDate"
           class="btn btn-primary"
           type="button"
           data-sort="creationDate"
@@ -66,7 +70,7 @@
           Erstelldatum
         </button>
         <button
-          id="btnImportance"
+          id="btnSortImportance"
           class="btn btn-primary"
           type="button"
           data-sort="importance"
@@ -74,7 +78,7 @@
           Wichtigkeit
         </button>
         <button
-          id="btnStatus"
+          id="btnSortStatus"
           class="btn btn-primary"
           type="button"
           data-sort="status"

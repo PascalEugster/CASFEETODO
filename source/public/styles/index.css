@@ -26,6 +26,7 @@
 }
 
 body {
+  margin-bottom: 50px;
   background-color: var(--background-color);
 }
 
@@ -49,6 +50,10 @@ footer {
   color: white;
   padding: 20px;
   text-align: center;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
 }
 
 footer p {
@@ -68,6 +73,9 @@ main {
   border-radius: 5px;
   padding: 10px;
   cursor: pointer;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .btn-primary {
@@ -90,7 +98,7 @@ main {
 }
 
 .actions,
-.filters {
+.sortButtons {
   display: flex;
   justify-content: space-between;
   margin-bottom: 20px;
@@ -178,7 +186,7 @@ main {
 }
 
 #create-todo {
-  background-color: white;
+  background-color: var(--color);
   border-radius: 5px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   padding: 20px;
@@ -186,6 +194,7 @@ main {
 }
 
 #create-todo h2 {
+  color: var(--text-color);
   font-size: 24px;
   font-weight: bold;
   margin-bottom: 10px;
@@ -207,8 +216,15 @@ main {
   gap: 10px;
 }
 
+#create-todo input {
+  color: var(--text-color);
+  background-color: var(--color);
+}
+
 #create-todo input,
 #create-todo select {
+  color: var(--text-color);
+  background-color: var(--color);
   padding: 10px;
   border: 1px solid var(--gunmetal);
   border-radius: 5px;

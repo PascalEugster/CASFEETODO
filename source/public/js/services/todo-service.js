@@ -35,39 +35,39 @@ export default class TodoService {
   getInitialData() {
     const currentDate = Date.now();
     const oneDayInMilliseconds = 86400000;
-  
+
     const initialData = [
       {
         id: `${currentDate}-0`,
         name: 'bring Milk',
-        status: 0,
+        status: false,
         description: 'from the store',
         importance: 1,
         creationDate: currentDate,
-        dueDate: currentDate + oneDayInMilliseconds, 
+        dueDate: currentDate + oneDayInMilliseconds,
       },
       {
         id: `${currentDate + oneDayInMilliseconds}-1`,
         name: 'bring Bread',
-        status: 0,
+        status: false,
         description: 'from the store',
         importance: 3,
         creationDate: currentDate + oneDayInMilliseconds,
-        dueDate: currentDate + 2 * oneDayInMilliseconds, 
+        dueDate: currentDate + 2 * oneDayInMilliseconds,
       },
       {
         id: `${currentDate + 2 * oneDayInMilliseconds}-2`,
         name: 'bring Eggs',
-        status: 0,
+        status: true,
         description: 'from the store',
         importance: 2,
-        creationDate: currentDate + 2 * oneDayInMilliseconds, 
-        dueDate: currentDate + 3 * oneDayInMilliseconds, 
+        creationDate: currentDate + 2 * oneDayInMilliseconds,
+        dueDate: currentDate + 3 * oneDayInMilliseconds,
       },
       {
         id: `${currentDate + 3 * oneDayInMilliseconds}-3`,
         name: 'bring Butter',
-        status: 0,
+        status: true,
         description: 'from the store',
         importance: 5,
         creationDate: currentDate + 3 * oneDayInMilliseconds,
@@ -76,16 +76,16 @@ export default class TodoService {
       {
         id: `${currentDate + 4 * oneDayInMilliseconds}-4`,
         name: 'bring Cheese',
-        status: 0,
+        status: false,
         description: 'from the store',
         importance: 3,
         creationDate: currentDate + 4 * oneDayInMilliseconds,
-        dueDate: currentDate + 5 * oneDayInMilliseconds, 
+        dueDate: currentDate + 5 * oneDayInMilliseconds,
       },
     ];
-  
+
     this.storage.update(initialData);
-  
+
     return initialData.map(
       (f) =>
         new Todo(
@@ -109,7 +109,7 @@ export default class TodoService {
     const todo = new Todo(
       id,
       name,
-      'pending',
+      false,
       description,
       importance,
       new Date(),
@@ -137,11 +137,10 @@ export default class TodoService {
     if (todo) {
       Object.assign(todo, updatedTodo);
       this.save();
-      return true; 
+      return true;
     }
     return false;
   }
-
 
   deleteTodo(todoId) {
     const todoIndex = this.todos.findIndex((todo) => todo.id === todoId);
