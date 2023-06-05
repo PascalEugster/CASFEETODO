@@ -15,6 +15,7 @@ export default class TodoController {
       document.getElementById('todo-list').innerHTML
     );
     this.filterStatus = false;
+    this.darkMode = false;
 
     this.todoTemplateContainer = document.getElementById('todo-container');
     this.createTodoContainer = document.getElementById('create-todo-container');
@@ -273,27 +274,33 @@ export default class TodoController {
 
   toggleDarkMode() {
     const htmlElement = document.querySelector('html');
-    htmlElement.classList.toggle('dark-mode');
+    if (this.darkMode) {
+      this.darkMode = false;
+      htmlElement.classList.remove('dark-mode');
+    } else {
+      this.darkMode = true;
+      htmlElement.classList.add('dark-mode');
+    }
   }
 
   setFilterStatus() {
-    this.filterStatus = !this.filterStatus;
-
     const filterStatusButton = document.getElementById('btnFilterStatus');
 
-    if (this.filterStatus) {
-      filterStatusButton.textContent = 'Erledigte ausblenden';
-    } else {
+    if (!this.filterStatus) {
       filterStatusButton.textContent = 'Erledigte anzeigen';
+    } else {
+      filterStatusButton.textContent = 'Erledigte ausblenden';
     }
-
+    this.filterStatus = !this.filterStatus;
     this.renderTodoView(todoService.todos);
   }
 
   renderTodoView(todos) {
     let filteredTodos = todos;
     if (this.filterStatus) {
-      filteredTodos = todos.filter((todo) => todo.status === 0);
+      filteredTodos = todos.filter(
+        (todo) => todo.status === false || todo.status === 0
+      );
     }
     this.todoTemplateContainer.innerHTML = this.todoTemplateCompiled(
       { todos: filteredTodos },
