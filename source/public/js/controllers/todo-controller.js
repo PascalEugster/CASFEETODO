@@ -1,4 +1,5 @@
 import { todoService } from '../services/todo-service.js';
+import formatDate from '../helpers/helpers.js';
 
 const buttonTranslations = {
   btnSortName: 'Name',
@@ -81,9 +82,10 @@ export default class TodoController {
 
     const sortButtons = document.querySelectorAll('.sortButtons button');
     sortButtons.forEach((button) => {
+      const sortButton = button;
       const buttonSortBy = button.getAttribute('data-sort');
       if (buttonSortBy !== sortBy) {
-        button.innerHTML = this.translateButton(button.id);
+        sortButton.innerHTML = this.translateButton(button.id);
       }
     });
 
@@ -107,7 +109,7 @@ export default class TodoController {
 
   initEventHandlers() {
     const btnDarkMode = document.getElementById('btnDarkMode');
-    btnDarkMode.addEventListener('click', this.toggleDarkMode.bind(this));
+    btnDarkMode.addEventListener('click', this.switchDarkMode.bind(this));
 
     const btnFilterStatus = document.getElementById('btnFilterStatus');
     btnFilterStatus.addEventListener('click', this.setFilterStatus.bind(this));
@@ -299,25 +301,20 @@ export default class TodoController {
     this.renderTodoView();
   }
 
-  toggleDarkMode() {
+  switchDarkMode() {
     this.darkMode = !this.darkMode;
-    this.setDarkMode(this.darkMode);
+    this.setDarkMode();
   }
 
-  setDarkMode(isDarkMode) {
+  setDarkMode() {
     // TODO: Store Todo in Cookie
-    if (isDarkMode) {
+    if (this.darkMode) {
       const htmlElement = document.querySelector('html');
       htmlElement.classList.add('dark-mode');
     } else {
       const htmlElement = document.querySelector('html');
       htmlElement.classList.remove('dark-mode');
     }
-  }
-
-  formatDate(date) {
-    const options = { year: 'numeric', month: 'long', day: 'numeric' };
-    return date.toLocaleDateString(undefined, options);
   }
 
   setFilterStatus() {
@@ -343,7 +340,7 @@ export default class TodoController {
 
     const formattedTodos = filteredTodos.map((todo) => ({
       ...todo,
-      dueDate: this.formatDate(todo.dueDate),
+      dueDate: formatDate(todo.dueDate),
       importance: importanceMap[todo.importance],
     }));
 
