@@ -6,7 +6,12 @@ const buttonTranslations = {
   btnSortCreationDate: 'Erstellungsdatum',
   btnSortImportance: 'Wichtigkeit',
   btnSortStatus: 'Status',
-  // Weitere Übersetzungen hier hinzufügen
+};
+
+const importanceMap = {
+  1: 'Klein',
+  2: 'Mittel',
+  3: 'Groß',
 };
 
 export default class TodoController {
@@ -21,7 +26,6 @@ export default class TodoController {
     this.createTodoContainer = document.getElementById('create-todo-container');
     this.todoContainer = document.getElementById('todo-container');
     this.loadTodoTemplate();
-    this.initEventHandlers();
   }
 
   showTodos() {
@@ -64,15 +68,15 @@ export default class TodoController {
         break;
 
       case 'importance':
-        sortedTodos = todoService.todos.slice().sort((a, b) => {
-          return a.importance - b.importance;
-        });
+        sortedTodos = todoService.todos
+          .slice()
+          .sort((a, b) => a.importance - b.importance);
         break;
 
       case 'status':
-        sortedTodos = todoService.todos.slice().sort((a, b) => {
-          return a.status - b.status;
-        });
+        sortedTodos = todoService.todos
+          .slice()
+          .sort((a, b) => a.status - b.status);
 
         break;
 
@@ -106,10 +110,7 @@ export default class TodoController {
       selectedButton.innerHTML = `${buttonName} ▼`;
     }
 
-    this.todoTemplateContainer.innerHTML = this.todoTemplateCompiled(
-      { todos: sortedTodos },
-      { allowProtoPropertiesByDefault: true }
-    );
+    this.renderTodoView(sortedTodos);
   }
 
   translateButton(buttonId) {
@@ -123,27 +124,17 @@ export default class TodoController {
     const btnFilterStatus = document.getElementById('btnFilterStatus');
     btnFilterStatus.addEventListener('click', this.setFilterStatus.bind(this));
 
+    const sortButtons = document.querySelectorAll('.sortButtons button');
+    sortButtons.forEach((button) => {
+      const sortMethod = button.getAttribute('data-sort');
+      button.addEventListener('click', () => {
+        this.sortTodos(sortMethod);
+      });
+    });
+
     const createTodoButton = document.getElementById('btnCreateTodo');
     createTodoButton.addEventListener('click', () => {
       this.showCreateTodoForm();
-    });
-
-    this.todoContainer.addEventListener('click', (event) => {
-      if (event.target.classList.contains('edit-todo-button')) {
-        this.editTodo(event);
-      }
-
-      if (event.target.classList.contains('todo-status-button')) {
-        this.toggleTodoStatus(event);
-      }
-    });
-
-    const sortButtons = document.querySelectorAll('.sortButtons button');
-    sortButtons.forEach((button) => {
-      const sortBy = button.getAttribute('data-sort');
-      button.addEventListener('click', () => {
-        this.sortTodos(sortBy);
-      });
     });
   }
 
@@ -154,7 +145,19 @@ export default class TodoController {
         const template = Handlebars.compile(html);
         this.todoTemplateCompiled = template;
         this.renderTodoView(todoService.todos);
-        this.initEventHandlers();
+        this.todoContainer.addEventListener('click', (event) => {
+          if (event.target.classList.contains('edit-todo-button')) {
+            this.editTodo(event);
+          }
+
+          if (event.target.classList.contains('todo-status-button')) {
+            this.toggleTodoStatus(event);
+          }
+        });
+      })
+      .catch((error) => {
+        // eslint-disable-next-line no-console
+        console.error('Template not found: ', error);
       });
   }
 
@@ -191,6 +194,10 @@ export default class TodoController {
           dueDateInput.value = todo.dueDate.toISOString().slice(0, 10);
           importanceInput.value = todo.importance;
         }
+      })
+      .catch((error) => {
+        // eslint-disable-next-line no-console
+        console.error('Template not found: ', error);
       });
   }
 
@@ -212,6 +219,7 @@ export default class TodoController {
         });
       })
       .catch((error) => {
+        // eslint-disable-next-line no-console
         console.error('Template not found: ', error);
       });
   }
@@ -311,6 +319,7 @@ export default class TodoController {
     const formattedTodos = filteredTodos.map((todo) => ({
       ...todo,
       dueDate: this.formatDate(todo.dueDate),
+      importance: importanceMap[todo.importance],
     }));
 
     this.todoTemplateContainer.innerHTML = this.todoTemplateCompiled(
@@ -322,7 +331,6 @@ export default class TodoController {
 
   initialize() {
     todoService.loadData();
-    this.renderTodoView(todoService.todos);
     this.initEventHandlers();
   }
 }

@@ -33,51 +33,56 @@ export default class TodoService {
   }
 
   getInitialData() {
-    const currentDate = Date.now();
-    const oneDayInMilliseconds = 86400000;
+    const currentDate = new Date();
+    const oneDayInMilliseconds = 24 * 60 * 60 * 1000;
 
     const initialData = [
       {
         id: `${currentDate}-0`,
-        name: 'bring Milk',
+        name: 'E-Mails beantworten',
         status: false,
-        description: 'from the store',
-        importance: 1,
+        description:
+          'Antworten auf die wichtigsten E-Mails senden und den Posteingang aufräumen.',
+        importance: 2,
         creationDate: currentDate,
         dueDate: currentDate + oneDayInMilliseconds,
       },
       {
         id: `${currentDate + oneDayInMilliseconds}-1`,
-        name: 'bring Bread',
+        name: 'Wäsche waschen',
         status: false,
-        description: 'from the store',
+        description:
+          'Schmutzige Wäsche sortieren, Waschmaschine beladen, Waschmittel hinzufügen und Programm starten.',
         importance: 3,
         creationDate: currentDate + oneDayInMilliseconds,
         dueDate: currentDate + 2 * oneDayInMilliseconds,
       },
       {
         id: `${currentDate + 2 * oneDayInMilliseconds}-2`,
-        name: 'bring Eggs',
+        name: 'Sport treiben',
         status: true,
-        description: 'from the store',
-        importance: 2,
+        description:
+          'Eine Stunde lang joggen gehen oder eine andere körperliche Aktivität ausüben, um fit zu bleiben.',
+        importance: 1,
         creationDate: currentDate + 2 * oneDayInMilliseconds,
         dueDate: currentDate + 3 * oneDayInMilliseconds,
       },
       {
         id: `${currentDate + 3 * oneDayInMilliseconds}-3`,
-        name: 'bring Butter',
+        name: 'Geburtstagsgeschenk besorgen',
         status: true,
-        description: 'from the store',
-        importance: 5,
+        description:
+          'Ein passendes Geburtstagsgeschenk für einen Freund oder Familienmitglied auswählen und kaufen.',
+        importance: 2,
         creationDate: currentDate + 3 * oneDayInMilliseconds,
         dueDate: currentDate + 4 * oneDayInMilliseconds,
       },
       {
         id: `${currentDate + 4 * oneDayInMilliseconds}-4`,
-        name: 'bring Cheese',
+        name: 'Küche aufräumen',
         status: false,
-        description: 'from the store',
+        description:
+          'Geschirr spülen, Oberflächen reinigen und Küchenutensilien an ihren Platz zurückstellen.',
         importance: 3,
         creationDate: currentDate + 4 * oneDayInMilliseconds,
         dueDate: currentDate + 5 * oneDayInMilliseconds,
