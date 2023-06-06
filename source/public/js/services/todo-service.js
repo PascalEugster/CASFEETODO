@@ -33,7 +33,7 @@ export default class TodoService {
   }
 
   getInitialData() {
-    const currentDate = new Date();
+    const currentDate = Date.now();
     const oneDayInMilliseconds = 24 * 60 * 60 * 1000;
 
     const initialData = [
@@ -123,6 +123,7 @@ export default class TodoService {
 
     this.todos.push(todo);
     this.save();
+    return todo;
   }
 
   getTodoById(id) {

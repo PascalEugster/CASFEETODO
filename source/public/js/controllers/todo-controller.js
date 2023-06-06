@@ -9,9 +9,9 @@ const buttonTranslations = {
 };
 
 const importanceMap = {
-  1: 'Klein',
+  1: 'Gering',
   2: 'Mittel',
-  3: 'Groß',
+  3: 'Hoch',
 };
 
 export default class TodoController {
@@ -20,19 +20,13 @@ export default class TodoController {
       document.getElementById('todo-list').innerHTML
     );
     this.filterStatus = false;
+    this.currentSortBy = 'name';
     this.darkMode = false;
 
     this.todoTemplateContainer = document.getElementById('todo-container');
     this.createTodoContainer = document.getElementById('create-todo-container');
     this.todoContainer = document.getElementById('todo-container');
     this.loadTodoTemplate();
-  }
-
-  showTodos() {
-    this.todoTemplateContainer.innerHTML = this.todoTemplateCompiled(
-      { todos: todoService.todos },
-      { allowProtoPropertiesByDefault: true }
-    );
   }
 
   sortTodos(sortBy) {
@@ -85,13 +79,6 @@ export default class TodoController {
         break;
     }
 
-    if (sortStatus === 'ascending') {
-      sortedTodos.reverse();
-      todoService.sortStatus[sortBy] = 'descending';
-    } else {
-      todoService.sortStatus[sortBy] = 'ascending';
-    }
-
     const sortButtons = document.querySelectorAll('.sortButtons button');
     sortButtons.forEach((button) => {
       const buttonSortBy = button.getAttribute('data-sort');
@@ -107,10 +94,11 @@ export default class TodoController {
     if (sortStatus === 'ascending') {
       selectedButton.innerHTML = `${buttonName} ▲`;
     } else {
+      this.sortedTodos = sortedTodos.reverse();
       selectedButton.innerHTML = `${buttonName} ▼`;
     }
-
-    this.renderTodoView(sortedTodos);
+    this.currentSortBy = sortBy;
+    return sortedTodos;
   }
 
   translateButton(buttonId) {
@@ -119,7 +107,7 @@ export default class TodoController {
 
   initEventHandlers() {
     const btnDarkMode = document.getElementById('btnDarkMode');
-    btnDarkMode.addEventListener('click', this.toggleDarkMode);
+    btnDarkMode.addEventListener('click', this.toggleDarkMode.bind(this));
 
     const btnFilterStatus = document.getElementById('btnFilterStatus');
     btnFilterStatus.addEventListener('click', this.setFilterStatus.bind(this));
@@ -128,7 +116,17 @@ export default class TodoController {
     sortButtons.forEach((button) => {
       const sortMethod = button.getAttribute('data-sort');
       button.addEventListener('click', () => {
-        this.sortTodos(sortMethod);
+        this.currentSortBy = sortMethod;
+
+        const sortStatus = todoService.sortStatus[sortMethod];
+
+        if (sortStatus === 'ascending') {
+          todoService.sortStatus[sortMethod] = 'descending';
+        } else {
+          todoService.sortStatus[sortMethod] = 'ascending';
+        }
+
+        this.renderTodoView();
       });
     });
 
@@ -144,7 +142,7 @@ export default class TodoController {
       .then((html) => {
         const template = Handlebars.compile(html);
         this.todoTemplateCompiled = template;
-        this.renderTodoView(todoService.todos);
+        this.renderTodoView();
         this.todoContainer.addEventListener('click', (event) => {
           if (event.target.classList.contains('edit-todo-button')) {
             this.editTodo(event);
@@ -163,6 +161,7 @@ export default class TodoController {
 
   showCreateTodoForm(todo) {
     this.todoTemplateContainer.style.display = 'none';
+    this.createTodoContainer.style.display = 'block';
 
     fetch('views/create-todo.html')
       .then((response) => response.text())
@@ -175,7 +174,8 @@ export default class TodoController {
         });
 
         const saveButton = document.getElementById('btnSave');
-        saveButton.addEventListener('click', () => {
+        saveButton.addEventListener('click', (event) => {
+          event.preventDefault();
           if (todo) {
             this.updateTodo(todo.id);
           } else {
@@ -183,12 +183,25 @@ export default class TodoController {
           }
         });
 
-        if (todo) {
-          const nameInput = document.getElementById('todo-name');
-          const descriptionInput = document.getElementById('todo-description');
-          const dueDateInput = document.getElementById('todo-due-date');
-          const importanceInput = document.getElementById('todo-importance');
+        const saveAndBackButton = document.getElementById('btnSaveAndBack');
+        saveAndBackButton.addEventListener('click', (event) => {
+          event.preventDefault();
+          if (todo) {
+            this.updateTodo(todo.id);
+          } else {
+            this.createTodo();
+          }
+          this.showTodoList();
+        });
+        const nameInput = document.getElementById('todo-name');
+        const descriptionInput = document.getElementById('todo-description');
+        const dueDateInput = document.getElementById('todo-due-date');
+        const importanceInput = document.getElementById('todo-importance');
 
+        // Prefill values
+        dueDateInput.value = new Date().toISOString().slice(0, 10);
+
+        if (todo) {
           nameInput.value = todo.name;
           descriptionInput.value = todo.description;
           dueDateInput.value = todo.dueDate.toISOString().slice(0, 10);
@@ -202,7 +215,9 @@ export default class TodoController {
   }
 
   showTodoList() {
+    this.renderTodoView();
     this.createTodoContainer.innerHTML = '';
+    this.createTodoContainer.style.display = 'none';
 
     this.todoTemplateContainer.style.display = 'block';
   }
@@ -235,9 +250,13 @@ export default class TodoController {
     const dueDate = dueDateInput.value;
     const importance = parseInt(importanceInput.value, 10);
 
-    todoService.createTodo(name, description, dueDate, importance);
-
-    this.renderTodoView(todoService.todos);
+    const createdTodo = todoService.createTodo(
+      name,
+      description,
+      dueDate,
+      importance
+    );
+    this.showCreateTodoForm(createdTodo);
   }
 
   editTodo(event) {
@@ -258,7 +277,7 @@ export default class TodoController {
 
       todoService.updateTodoStatus(todoId, updatedStatus);
 
-      this.renderTodoView(todoService.todos);
+      this.renderTodoView();
     }
   }
 
@@ -272,22 +291,27 @@ export default class TodoController {
 
     todo.name = nameInput.value;
     todo.description = descriptionInput.value;
-    todo.dueDate = dueDateInput.value;
+    todo.dueDate = new Date(dueDateInput.value);
     todo.importance = parseInt(importanceInput.value, 10);
 
     todoService.updateTodo(todoId, todo);
 
-    this.renderTodoView(todoService.todos);
+    this.renderTodoView();
   }
 
   toggleDarkMode() {
-    const htmlElement = document.querySelector('html');
-    if (this.darkMode) {
-      this.darkMode = false;
-      htmlElement.classList.remove('dark-mode');
-    } else {
-      this.darkMode = true;
+    this.darkMode = !this.darkMode;
+    this.setDarkMode(this.darkMode);
+  }
+
+  setDarkMode(isDarkMode) {
+    // TODO: Store Todo in Cookie
+    if (isDarkMode) {
+      const htmlElement = document.querySelector('html');
       htmlElement.classList.add('dark-mode');
+    } else {
+      const htmlElement = document.querySelector('html');
+      htmlElement.classList.remove('dark-mode');
     }
   }
 
@@ -305,13 +329,14 @@ export default class TodoController {
       filterStatusButton.textContent = 'Erledigte ausblenden';
     }
     this.filterStatus = !this.filterStatus;
-    this.renderTodoView(todoService.todos);
+    this.renderTodoView();
   }
 
-  renderTodoView(todos) {
-    let filteredTodos = todos;
+  renderTodoView() {
+    let filteredTodos = this.sortTodos(this.currentSortBy);
+    this.setDarkMode(this.darkMode);
     if (this.filterStatus) {
-      filteredTodos = todos.filter(
+      filteredTodos = filteredTodos.filter(
         (todo) => todo.status === false || todo.status === 0
       );
     }

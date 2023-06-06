@@ -1,6 +1,7 @@
 :root {
   --background-color: #f2f2f2;
   --text-color: #232830;
+  --border-color: #fff0;
   --color: white;
   --gunmetal: #19323cff;
   --holy-blue: #19323cff;
@@ -12,6 +13,7 @@
   --background-color: #222;
   --color: #232830;
   --text-color: white;
+  --border-color: #4b6997;
   --gunmetal: #415070;
   --holy-blue: #19323cff;
   --holy-blue-lighter: #11426b;
@@ -97,11 +99,24 @@ main {
   background-color: var(--holy-blue);
 }
 
-.actions,
-.sortButtons {
+.actions button,
+.sortButtons button {
+  margin-left: 5px;
+  margin-right: 5px;
+  margin-bottom: 10px;
+}
+
+.actions {
   display: flex;
   justify-content: space-between;
   margin-bottom: 20px;
+}
+.sortButtons {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  align-items: center;
 }
 
 .todos {
@@ -110,9 +125,36 @@ main {
   gap: 20px;
 }
 
+.no-todos-found {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 20px;
+  text-align: center;
+  background-color: var(--color);
+
+  border: var(--border-color) 1px solid;
+  border-radius: 5px;
+  margin-top: 20px;
+}
+
+.no-todos-found ion-icon {
+  font-size: 48px;
+  color: #e74c3c;
+}
+
+.no-todos-found p {
+  margin-top: 10px;
+  font-size: 18px;
+  color: var(--text-color);
+}
+
 .todo {
   background-color: var(--color);
   color: var(--text-color);
+  border: var(--border-color) 1px solid;
   border-radius: 5px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   padding: 20px;
@@ -241,4 +283,31 @@ main {
   border-radius: 5px;
   padding: 10px;
   cursor: pointer;
+}
+
+.todo-importance {
+  width: -moz-fit-content;
+  width: fit-content;
+
+  display: flex;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 12px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.todo-importance.Gering {
+  background-color: #28a745;
+  color: white;
+}
+
+.todo-importance.Mittel {
+  background-color: #ffc107;
+  color: #212529;
+}
+
+.todo-importance.Hoch {
+  background-color: #dc3545;
+  color: white;
 }
