@@ -22,7 +22,7 @@ export default class TodoController {
     );
     this.filterStatus = false;
     this.currentSortBy = 'name';
-    this.darkMode = false;
+    this.darkMode = this.getDarkModeFromCookie() || false;
 
     this.todoTemplateContainer = document.getElementById('todo-container');
     this.createTodoContainer = document.getElementById('create-todo-container');
@@ -312,6 +312,7 @@ export default class TodoController {
   switchDarkMode() {
     this.darkMode = !this.darkMode;
     this.setDarkMode();
+    this.saveDarkModeToCookie(); // Dark-Mode-Wert in Cookie speichern
   }
 
   setDarkMode() {
@@ -327,6 +328,22 @@ export default class TodoController {
       const htmlElement = document.querySelector('html');
       htmlElement.classList.remove('dark-mode');
     }
+  }
+
+  saveDarkModeToCookie() {
+    document.cookie = `darkMode=${this.darkMode}; expires=Fri, 31 Dec 9999 23:59:59 GMT; path=/`;
+  }
+
+  getDarkModeFromCookie() {
+    const cookies = document.cookie.split(';');
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i];
+      const [name, value] = cookie.trim().split('=');
+      if (name === 'darkMode') {
+        return value === 'true';
+      }
+    }
+    return false; // Standardwert, falls kein Cookie gefunden wurde
   }
 
   setFilterStatus() {
