@@ -178,22 +178,16 @@ export default class TodoController {
         const saveButton = document.getElementById('btnSave');
         saveButton.addEventListener('click', (event) => {
           event.preventDefault();
-          if (todo) {
-            this.updateTodo(todo.id);
-          } else {
-            this.createTodo();
-          }
+          this.submitTodoForm(todo);
         });
 
         const saveAndBackButton = document.getElementById('btnSaveAndBack');
         saveAndBackButton.addEventListener('click', (event) => {
           event.preventDefault();
-          if (todo) {
-            this.updateTodo(todo.id);
-          } else {
-            this.createTodo();
+          const isValid = this.submitTodoForm(todo);
+          if (isValid) {
+            this.showTodoList();
           }
-          this.showTodoList();
         });
         const nameInput = document.getElementById('todo-name');
         const descriptionInput = document.getElementById('todo-description');
@@ -214,6 +208,20 @@ export default class TodoController {
         // eslint-disable-next-line no-console
         console.error('Template not found: ', error);
       });
+  }
+
+  submitTodoForm(todo) {
+    const todoForm = document.getElementById('todo-form');
+    const isFormValid = todoForm.checkValidity();
+    if (!isFormValid) {
+      return false;
+    }
+    if (todo) {
+      this.updateTodo(todo.id);
+    } else {
+      this.createTodo();
+    }
+    return true;
   }
 
   showTodoList() {
@@ -348,7 +356,6 @@ export default class TodoController {
       { todos: formattedTodos },
       { allowProtoPropertiesByDefault: true }
     );
-    console.log('renderTodoView');
   }
 
   initialize() {
