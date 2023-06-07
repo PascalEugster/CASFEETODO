@@ -315,11 +315,15 @@ export default class TodoController {
   }
 
   setDarkMode() {
-    // TODO: Store Todo in Cookie
+    const btnDarkMode = document.getElementById('btnDarkMode');
     if (this.darkMode) {
+      btnDarkMode.innerHTML =
+        '<ion-icon name="sunny-outline"></ion-icon> Light Mode';
       const htmlElement = document.querySelector('html');
       htmlElement.classList.add('dark-mode');
     } else {
+      btnDarkMode.innerHTML =
+        '<ion-icon name="moon-outline"></ion-icon>Dark Mode';
       const htmlElement = document.querySelector('html');
       htmlElement.classList.remove('dark-mode');
     }
