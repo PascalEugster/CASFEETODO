@@ -22,10 +22,11 @@ export default class TodoController {
     );
     this.filterStatus = false;
     this.currentSortBy = 'name';
-    this.darkMode = this.getDarkModeFromCookie() || false;
+    this.saveButton = document.getElementById('btnSave');
+    this.saveAndBackButton = document.getElementById('btnSaveAndBack');
 
     this.todoTemplateContainer = document.getElementById('todo-container');
-    this.createTodoContainer = document.getElementById('create-todo-container');
+    this.editTodoContainer = document.getElementById('edit-todo-container');
     this.todoContainer = document.getElementById('todo-container');
     this.loadTodoTemplate();
   }
@@ -108,9 +109,6 @@ export default class TodoController {
   }
 
   initEventHandlers() {
-    const btnDarkMode = document.getElementById('btnDarkMode');
-    btnDarkMode.addEventListener('click', this.switchDarkMode.bind(this));
-
     const btnFilterStatus = document.getElementById('btnFilterStatus');
     btnFilterStatus.addEventListener('click', this.setFilterStatus.bind(this));
 
@@ -134,12 +132,12 @@ export default class TodoController {
 
     const createTodoButton = document.getElementById('btnCreateTodo');
     createTodoButton.addEventListener('click', () => {
-      this.showCreateTodoForm();
+      this.showTodoForm();
     });
   }
 
   loadTodoTemplate() {
-    fetch('views/todo-list.html')
+    fetch('views/todo-list.hbs')
       .then((response) => response.text())
       .then((html) => {
         const template = Handlebars.compile(html);
@@ -161,34 +159,43 @@ export default class TodoController {
       });
   }
 
-  showCreateTodoForm(todo) {
+  showTodoForm(todo) {
+    const currentTodo = todo;
     this.todoTemplateContainer.style.display = 'none';
-    this.createTodoContainer.style.display = 'block';
+    this.editTodoContainer.style.display = 'block';
 
-    fetch('views/create-todo.html')
+    let templatePath = '';
+    if (todo != null) {
+      templatePath = 'views/edit-todo.hbs';
+    } else {
+      templatePath = 'views/create-todo.hbs';
+    }
+
+    fetch(templatePath)
       .then((response) => response.text())
       .then((html) => {
-        this.createTodoContainer.innerHTML = html;
-
+        this.editTodoContainer.innerHTML = html;
+        const todoForm = document.getElementById('todo-form');
         const backButton = document.getElementById('btnBack');
+
+        todoForm.addEventListener('submit', (event) => {
+          event.preventDefault();
+          const buttonAction = event.submitter.dataset.action;
+
+          if (buttonAction === 'save') {
+            this.submitTodoForm(currentTodo);
+          } else if (buttonAction === 'saveAndBack') {
+            const isValid = this.submitTodoForm(currentTodo);
+            if (isValid) {
+              this.showTodoList();
+            }
+          }
+        });
+
         backButton.addEventListener('click', () => {
           this.showTodoList();
         });
 
-        const saveButton = document.getElementById('btnSave');
-        saveButton.addEventListener('click', (event) => {
-          event.preventDefault();
-          this.submitTodoForm(todo);
-        });
-
-        const saveAndBackButton = document.getElementById('btnSaveAndBack');
-        saveAndBackButton.addEventListener('click', (event) => {
-          event.preventDefault();
-          const isValid = this.submitTodoForm(todo);
-          if (isValid) {
-            this.showTodoList();
-          }
-        });
         const nameInput = document.getElementById('todo-name');
         const descriptionInput = document.getElementById('todo-description');
         const dueDateInput = document.getElementById('todo-due-date');
@@ -217,36 +224,19 @@ export default class TodoController {
       return false;
     }
     if (todo) {
-      this.updateTodo(todo.id);
+      this.updateTodo(todo.id, todoForm);
     } else {
-      this.createTodo();
+      this.createTodo(todoForm);
     }
     return true;
   }
 
   showTodoList() {
     this.renderTodoView();
-    this.createTodoContainer.innerHTML = '';
-    this.createTodoContainer.style.display = 'none';
+    this.editTodoContainer.innerHTML = '';
+    this.editTodoContainer.style.display = 'none';
 
     this.todoTemplateContainer.style.display = 'block';
-  }
-
-  loadCreateTodoForm() {
-    fetch('create-todo.html')
-      .then((response) => response.text())
-      .then((html) => {
-        this.createTodoContainer.innerHTML = html;
-
-        const createButton = document.getElementById('btnCreateTodo');
-        createButton.addEventListener('click', () => {
-          this.createTodo();
-        });
-      })
-      .catch((error) => {
-        // eslint-disable-next-line no-console
-        console.error('Template not found: ', error);
-      });
   }
 
   createTodo() {
@@ -266,7 +256,7 @@ export default class TodoController {
       dueDate,
       importance
     );
-    this.showCreateTodoForm(createdTodo);
+    this.showTodoForm(createdTodo);
   }
 
   editTodo(event) {
@@ -274,7 +264,7 @@ export default class TodoController {
     const todo = todoService.getTodoById(todoId);
 
     if (todo) {
-      this.showCreateTodoForm(todo);
+      this.showTodoForm(todo);
     }
   }
 
@@ -309,43 +299,6 @@ export default class TodoController {
     this.renderTodoView();
   }
 
-  switchDarkMode() {
-    this.darkMode = !this.darkMode;
-    this.setDarkMode();
-    this.saveDarkModeToCookie(); // Dark-Mode-Wert in Cookie speichern
-  }
-
-  setDarkMode() {
-    const btnDarkMode = document.getElementById('btnDarkMode');
-    if (this.darkMode) {
-      btnDarkMode.innerHTML =
-        '<ion-icon name="sunny-outline"></ion-icon> Light Mode';
-      const htmlElement = document.querySelector('html');
-      htmlElement.classList.add('dark-mode');
-    } else {
-      btnDarkMode.innerHTML =
-        '<ion-icon name="moon-outline"></ion-icon>Dark Mode';
-      const htmlElement = document.querySelector('html');
-      htmlElement.classList.remove('dark-mode');
-    }
-  }
-
-  saveDarkModeToCookie() {
-    document.cookie = `darkMode=${this.darkMode}; expires=Fri, 31 Dec 9999 23:59:59 GMT; path=/`;
-  }
-
-  getDarkModeFromCookie() {
-    const cookies = document.cookie.split(';');
-    for (let i = 0; i < cookies.length; i++) {
-      const cookie = cookies[i];
-      const [name, value] = cookie.trim().split('=');
-      if (name === 'darkMode') {
-        return value === 'true';
-      }
-    }
-    return false; // Standardwert, falls kein Cookie gefunden wurde
-  }
-
   setFilterStatus() {
     const filterStatusButton = document.getElementById('btnFilterStatus');
 
@@ -360,7 +313,6 @@ export default class TodoController {
 
   renderTodoView() {
     let filteredTodos = this.sortTodos(this.currentSortBy);
-    this.setDarkMode(this.darkMode);
     if (this.filterStatus) {
       filteredTodos = filteredTodos.filter(
         (todo) => todo.status === false || todo.status === 0

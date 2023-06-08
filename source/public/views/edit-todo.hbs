@@ -1,5 +1,5 @@
 <div id="create-todo">
-  <h2><ion-icon name="create-outline"></ion-icon>Neues Todo erstellen</h2>
+  <h2><ion-icon name="create-outline"></ion-icon>Todo editieren</h2>
   <button id="btnBack" type="button">Zurück</button>
   <form id="todo-form">
     <input
@@ -17,7 +17,9 @@
       <option value="3">Hoch</option>
     </select>
 
-    <button id="btnSave" type="submit">Speichern</button>
-    <button id="btnSaveAndBack" type="submit">Speichern & Zurück</button>
+    <button id="btnSave" type="submit" data-action="save">Speichern</button>
+    <button id="btnSaveAndBack" type="submit" data-action="saveAndBack">
+      Speichern & Zurück
+    </button>
   </form>
 </div>

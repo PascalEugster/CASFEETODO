@@ -8,21 +8,23 @@
       <p class="todo-description">{{description}}</p>
     </div>
     <div class="todo-actions">
-      <button
-        type="button"
-        class="edit-todo-button btn btn-primary"
-        data-todo-id="{{id}}"
-      >
-        Berarbeiten
-      </button>
-    </div>
-    <div class="todo-status">
-      <button
-        class="todo-status-button {{#if status}}done{{else}}not-done{{/if}}"
-        data-todo-id="{{id}}"
-      >
-        {{#if status}} Erledigt {{else}} Offen {{/if}}
-      </button>
+      <div class="edit">
+        <button
+          type="button"
+          class="edit-todo-button btn btn-primary"
+          data-todo-id="{{id}}"
+        >
+          Berarbeiten
+        </button>
+      </div>
+      <div class="status">
+        <button
+          class="todo-status-button {{#if status}}done{{else}}not-done{{/if}}"
+          data-todo-id="{{id}}"
+        >
+          {{#if status}} Erledigt {{else}} Offen {{/if}}
+        </button>
+      </div>
     </div>
   </div>
   {{else}}

@@ -96,7 +96,7 @@ main {
 }
 
 .btn-primary:hover {
-  background-color: var(--holy-blue);
+  background-color: var(--holy-blue-lighter);
 }
 
 .actions button,
@@ -183,11 +183,20 @@ main {
   margin-bottom: 10px;
 }
 
+.todo-details > * {
+  margin-bottom: 5px;
+}
+
 .todo-description {
   font-size: 14px;
 }
 
-.todo-status {
+.todo-actions {
+  display: flex;
+  justify-content: space-between;
+}
+
+.todo-actions .status {
   display: flex;
   justify-content: flex-end;
   align-items: center;
