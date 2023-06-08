@@ -2,11 +2,11 @@ import { todoService } from '../services/todo-service.js';
 import formatDate from '../helpers/helpers.js';
 
 const buttonTranslations = {
-  btnSortName: 'Name',
-  btnSortDueDate: 'Fälligkeitsdatum',
-  btnSortCreationDate: 'Erstellungsdatum',
-  btnSortImportance: 'Wichtigkeit',
-  btnSortStatus: 'Status',
+  sortNameButton: 'Name',
+  sortDueDateButton: 'Fälligkeitsdatum',
+  sortCreationDateButton: 'Erstellungsdatum',
+  sortImportanceButton: 'Wichtigkeit',
+  sortStatusButton: 'Status',
 };
 
 const importanceMap = {
@@ -22,8 +22,9 @@ export default class TodoController {
     );
     this.filterStatus = false;
     this.currentSortBy = 'name';
-    this.saveButton = document.getElementById('btnSave');
-    this.saveAndBackButton = document.getElementById('btnSaveAndBack');
+    this.saveButton = document.getElementById('saveButton');
+    this.saveAndBackButton = document.getElementById('saveAndBackButton');
+    this.filterStatusButton = document.getElementById('filterStatusButton');
 
     this.todoTemplateContainer = document.getElementById('todo-container');
     this.editTodoContainer = document.getElementById('edit-todo-container');
@@ -109,8 +110,10 @@ export default class TodoController {
   }
 
   initEventHandlers() {
-    const btnFilterStatus = document.getElementById('btnFilterStatus');
-    btnFilterStatus.addEventListener('click', this.setFilterStatus.bind(this));
+    this.filterStatusButton.addEventListener(
+      'click',
+      this.setFilterStatus.bind(this)
+    );
 
     const sortButtons = document.querySelectorAll('.sortButtons button');
     sortButtons.forEach((button) => {
@@ -130,7 +133,18 @@ export default class TodoController {
       });
     });
 
-    const createTodoButton = document.getElementById('btnCreateTodo');
+    this.todoContainer.addEventListener('click', (event) => {
+      const { action } = event.target.dataset;
+      if (action === 'editTodo') {
+        this.editTodo(event);
+      }
+
+      if (action === 'toggleStatus') {
+        this.toggleTodoStatus(event);
+      }
+    });
+
+    const createTodoButton = document.getElementById('createTodoButton');
     createTodoButton.addEventListener('click', () => {
       this.showTodoForm();
     });
@@ -143,15 +157,6 @@ export default class TodoController {
         const template = Handlebars.compile(html);
         this.todoTemplateCompiled = template;
         this.renderTodoView();
-        this.todoContainer.addEventListener('click', (event) => {
-          if (event.target.classList.contains('edit-todo-button')) {
-            this.editTodo(event);
-          }
-
-          if (event.target.classList.contains('todo-status-button')) {
-            this.toggleTodoStatus(event);
-          }
-        });
       })
       .catch((error) => {
         // eslint-disable-next-line no-console
@@ -176,7 +181,7 @@ export default class TodoController {
       .then((html) => {
         this.editTodoContainer.innerHTML = html;
         const todoForm = document.getElementById('todo-form');
-        const backButton = document.getElementById('btnBack');
+        const backButton = document.getElementById('backButton');
 
         todoForm.addEventListener('submit', (event) => {
           event.preventDefault();
@@ -300,12 +305,10 @@ export default class TodoController {
   }
 
   setFilterStatus() {
-    const filterStatusButton = document.getElementById('btnFilterStatus');
-
     if (!this.filterStatus) {
-      filterStatusButton.textContent = 'Erledigte anzeigen';
+      this.filterStatusButton.textContent = 'Erledigte anzeigen';
     } else {
-      filterStatusButton.textContent = 'Erledigte ausblenden';
+      this.filterStatusButton.textContent = 'Erledigte ausblenden';
     }
     this.filterStatus = !this.filterStatus;
     this.renderTodoView();

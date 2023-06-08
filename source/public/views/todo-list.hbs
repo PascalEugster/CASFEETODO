@@ -12,7 +12,7 @@
         <button
           type="button"
           class="edit-todo-button btn btn-primary"
-          data-todo-id="{{id}}"
+          data-todo-id="{{id}}" data-action="editTodo"
         >
           Berarbeiten
         </button>
@@ -20,7 +20,7 @@
       <div class="status">
         <button
           class="todo-status-button {{#if status}}done{{else}}not-done{{/if}}"
-          data-todo-id="{{id}}"
+          data-todo-id="{{id}}" data-action="toggleStatus"
         >
           {{#if status}} Erledigt {{else}} Offen {{/if}}
         </button>

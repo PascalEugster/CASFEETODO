@@ -1,6 +1,7 @@
 export default class ThemeController {
   constructor() {
     this.darkMode = this.getDarkModeFromCookie() || false;
+
     this.setDarkMode();
   }
 
@@ -11,21 +12,21 @@ export default class ThemeController {
   }
 
   initEventHandlers() {
-    const btnDarkMode = document.getElementById('btnDarkMode');
-    btnDarkMode.addEventListener('click', () => {
+    const darkModeButton = document.getElementById('darkModeButton');
+    darkModeButton.addEventListener('click', () => {
       this.switchDarkMode();
     });
   }
 
   setDarkMode() {
-    const btnDarkMode = document.getElementById('btnDarkMode');
+    const darkModeButton = document.getElementById('darkModeButton');
     if (this.darkMode) {
-      btnDarkMode.innerHTML =
+      darkModeButton.innerHTML =
         '<ion-icon name="sunny-outline"></ion-icon> Light Mode';
       const htmlElement = document.querySelector('html');
       htmlElement.classList.add('dark-mode');
     } else {
-      btnDarkMode.innerHTML =
+      darkModeButton.innerHTML =
         '<ion-icon name="moon-outline"></ion-icon>Dark Mode';
       const htmlElement = document.querySelector('html');
       htmlElement.classList.remove('dark-mode');
@@ -37,15 +38,17 @@ export default class ThemeController {
   }
 
   getDarkModeFromCookie() {
+    let darkMode = false;
     const cookies = document.cookie.split(';');
-    for (let i = 0; i < cookies.length; i++) {
-      const cookie = cookies[i];
+
+    cookies.forEach((cookie) => {
       const [name, value] = cookie.trim().split('=');
-      if (name === 'darkMode') {
-        return value === 'true';
+      if (name === 'darkMode' && value === 'true') {
+        darkMode = true;
       }
-    }
-    return false;
+    });
+
+    return darkMode;
   }
 
   initialize() {

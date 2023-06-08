@@ -1,24 +1,24 @@
-<div id="create-todo">
-  <h2><ion-icon name="create-outline"></ion-icon>Todo editieren</h2>
-  <button id="btnBack" type="button">Zurück</button>
-  <form id="todo-form">
+<div id='create-todo'>
+  <h2><ion-icon name='create-outline'></ion-icon>Todo editieren</h2>
+  <button id='backButton' type='button'>Zurück</button>
+  <form id='todo-form'>
     <input
-      type="text"
-      id="todo-name"
-      placeholder="Todo Name"
+      type='text'
+      id='todo-name'
+      placeholder='Todo Name'
       required
-      minlength="10"
+      minlength='10'
     />
-    <input type="text" id="todo-description" placeholder="Todo Description" />
-    <input type="date" title="datum" id="todo-due-date" required />
-    <select title="Wichtigkeit" id="todo-importance" required>
-      <option value="1">Niedrig</option>
-      <option value="2">Mittel</option>
-      <option value="3">Hoch</option>
+    <input type='text' id='todo-description' placeholder='Todo Description' />
+    <input type='date' title='datum' id='todo-due-date' required />
+    <select title='Wichtigkeit' id='todo-importance' required>
+      <option value='1'>Niedrig</option>
+      <option value='2'>Mittel</option>
+      <option value='3'>Hoch</option>
     </select>
 
-    <button id="btnSave" type="submit" data-action="save">Speichern</button>
-    <button id="btnSaveAndBack" type="submit" data-action="saveAndBack">
+    <button id='saveButton' type='submit' data-action='save'>Speichern</button>
+    <button id='saveAndBackButton' type='submit' data-action='saveAndBack'>
       Speichern & Zurück
     </button>
   </form>

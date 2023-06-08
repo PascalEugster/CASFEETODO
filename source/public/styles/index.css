@@ -251,7 +251,7 @@ main {
   margin-bottom: 10px;
 }
 
-#create-todo button#btnBack {
+#create-todo button#backButton {
   background-color: var(--gunmetal);
   color: white;
   border: none;
