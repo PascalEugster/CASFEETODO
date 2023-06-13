@@ -18,35 +18,87 @@
     ></script>
     <link rel="stylesheet" href="styles/index.css" />
 
-    <!-- Controllers -->
-    <script src="js/controllers/index-controller.js" type="module"></script>
+    <!-- Handlebar Templates -->
+    <script id="todo-list" type="text/x-handlebars-template"></script>
 
-    <script src="js/controllers/theme-controller.js" type="module"></script>
+    <script id="header-template" type="text/x-handlebars-template">
+      <header>
+        <h1><ion-icon name='layers-outline'></ion-icon>SimpleDo</h1>
+        <h2>Die einfache Notitzapp</h2>
+        <div class='loginActions'>
+          <button
+            id='loginButton'
+            type='button'
+            class='btn btn-primary js-non-user'
+          >Login</button>
+          <button
+            id='logoutButton'
+            type='button'
+            class='btn btn-primary js-user'
+          >Logout</button>
+        </div>
+      </header>
+    </script>
+
+    <script id="footer-template" type="text/x-handlebars-template">
+      <footer>
+        <p>SimpleDo - Die einfache Notitzapp</p>
+        <p>© 2023 by SimpleDo</p>
+      </footer>
+    </script>
+
+    <!-- Controllers -->
+    <script
+      src="js/controllers/index-controller.js"
+      type="module"
+      defer
+    ></script>
+
+    <script
+      src="js/controllers/theme-controller.js"
+      type="module"
+      defer
+    ></script>
 
     <script
       src="js/controllers/todo-controller.js"
       type="module"
       defer
     ></script>
-
-    <!-- Handlebar Templates -->
-    <script id="todo-list" type="text/x-handlebars-template"></script>
   </head>
   <body>
     <div id="header-container"></div>
+    <section id="login-container" class="js-non-user">
+      <div class="login-message">
+        <h3>Willkommen bei SimpleDo!</h3>
+        <p>Bitte loggen Sie sich ein, um die App zu nutzen.</p>
+      </div>
+    </section>
     <main>
       <div class="actions">
-        <button id="createTodoButton" class="btn btn-primary" type="button">
+        <button
+          id="createTodoButton"
+          class="btn btn-primary js-user"
+          type="button"
+        >
           <ion-icon name="create-outline"></ion-icon>Neues Todo erstellen
         </button>
-        <button id="filterStatusButton" class="btn btn-primary" type="button">
+        <button
+          id="filterStatusButton"
+          class="btn btn-primary js-user"
+          type="button"
+        >
           Erledigte ausblenden
         </button>
-        <button id="darkModeButton" class="btn btn-primary" type="button">
+        <button
+          id="darkModeButton"
+          class="btn btn-primary js-user"
+          type="button"
+        >
           Dark Mode
         </button>
       </div>
-      <div class="sortButtons">
+      <div class="sortButtons js-user">
         <button
           id="sortNameButton"
           class="btn btn-primary"

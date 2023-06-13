@@ -7,7 +7,8 @@ export class TodoController {
       (await todoStore.getTodos(
         SecurityUtil.currentUser(req),
         req.body.sortMethod,
-        req.body.sortOrder
+        req.body.sortOrder, 
+        req.body.filterStatus
       )) || []
     );
   };

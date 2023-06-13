@@ -3,7 +3,7 @@
   --text-color: #232830;
   --border-color: #fff0;
   --color: white;
-  --gunmetal: #19323cff;
+  --gunmetal: #435e69;
   --holy-blue: #19323cff;
   --holy-blue-lighter: #11426b;
   --healty-green: #4caf50;
@@ -18,10 +18,6 @@
   --holy-blue: #19323cff;
   --holy-blue-lighter: #11426b;
   --healty-green: #4caf50;
-}
-
-.hidden {
-  display: none;
 }
 
 * {
@@ -298,6 +294,31 @@ main {
   cursor: pointer;
 }
 
+#login-container {
+  text-align: center;
+  padding: 20px;
+  background-color: #f8f8f8;
+}
+
+#login-container .login-message {
+  margin: 0 auto;
+  max-width: 300px;
+}
+
+#login-container h3 {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+#login-container p {
+  font-size: 16px;
+  margin-bottom: 20px;
+}
+
+#login-container button {
+  font-size: 16px;
+}
+
 .todo-importance {
   width: -moz-fit-content;
   width: fit-content;
@@ -323,4 +344,8 @@ main {
 .todo-importance.Hoch {
   background-color: #dc3545;
   color: white;
+}
+
+.hidden {
+  display: none;
 }

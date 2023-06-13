@@ -10,8 +10,12 @@ class TodoService {
     });
   }
 
-  async getTodos(sortMethod, sortOrder) {
-    return httpService.ajax('POST', '/todos/', { sortMethod, sortOrder });
+  async getTodos(sortMethod, sortOrder, filterStatus) {
+    return httpService.ajax('POST', '/todos/', {
+      sortMethod,
+      sortOrder,
+      filterStatus,
+    });
   }
 
   async getTodo(id) {

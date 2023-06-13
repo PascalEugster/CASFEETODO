@@ -27,8 +27,6 @@ export default class TodoController {
     this.saveButton = document.getElementById('saveButton');
     this.saveAndBackButton = document.getElementById('saveAndBackButton');
     this.filterStatusButton = document.getElementById('filterStatusButton');
-    this.loginButton = document.getElementById('loginButton');
-    this.logoutButton = document.getElementById('logoutButton');
 
     this.todoTemplateContainer = document.getElementById('todo-container');
     this.editTodoContainer = document.getElementById('edit-todo-container');
@@ -45,24 +43,6 @@ export default class TodoController {
       'click',
       this.setFilterStatus.bind(this)
     );
-
-    // Auth Service
-    this.loginButton.addEventListener('click', () => {
-      authService
-        .login('admin@admin.ch', '123456')
-        .then(() => {
-          this.updateStatus();
-        })
-        .catch((error) => {
-          // eslint-disable-next-line no-console
-          console.error('Fehler beim Einloggen:', error);
-        });
-    });
-
-    this.logoutButton.addEventListener('click', () => {
-      authService.logout();
-      this.updateStatus();
-    });
 
     const sortButtons = document.querySelectorAll('.sortButtons button');
     sortButtons.forEach((button) => {
@@ -114,19 +94,6 @@ export default class TodoController {
     }
   }
 
-  updateStatus() {
-    Array.from(document.querySelectorAll('.js-non-user')).forEach((x) =>
-      x.classList.toggle('hidden', authService.isLoggedIn())
-    );
-    Array.from(document.querySelectorAll('.js-user')).forEach((x) =>
-      x.classList.toggle('hidden', !authService.isLoggedIn())
-    );
-
-    if (authService.isLoggedIn()) {
-      this.renderTodoView();
-    }
-  }
-
   loadTodoTemplate() {
     fetch('views/todo-list.hbs')
       .then((response) => response.text())
@@ -165,8 +132,10 @@ export default class TodoController {
           const buttonAction = event.submitter.dataset.action;
 
           if (buttonAction === 'save') {
+            this.leaveTodoForm = false;
             this.submitTodoForm(currentTodo);
           } else if (buttonAction === 'saveAndBack') {
+            this.leaveTodoForm = true;
             const isValid = this.submitTodoForm(currentTodo);
             if (isValid) {
               this.showTodoList();
@@ -237,7 +206,9 @@ export default class TodoController {
     todoService
       .createTodo(name, description, dueDate, importance)
       .then((createdTodo) => {
-        this.showTodoForm(createdTodo);
+        if (!this.leaveTodoForm) {
+          this.showTodoForm(createdTodo);
+        }
       })
       .catch((error) => {
         // eslint-disable-next-line no-console
@@ -325,40 +296,35 @@ export default class TodoController {
 
   renderTodoView() {
     // Rufe die Todos mit Hilfe des todoService ab
-    todoService
-      .getTodos(this.sortMethod, this.sortStatus)
-      .then((todos) => {
-        let filteredTodos = todos;
-        if (this.filterStatus) {
-          filteredTodos = filteredTodos.filter(
-            (todo) => todo.status === false || todo.status === 0
+    if (authService.isLoggedIn()) {
+      todoService
+        .getTodos(this.sortMethod, this.sortStatus, this.filterStatus)
+        .then((todos) => {
+          const formattedTodos = todos.map((todo) => {
+            const formattedDueDate = todo.dueDate
+              ? formatDate(new Date(todo.dueDate))
+              : '';
+
+            return {
+              id: todo.id,
+              createdBy: todo.createdBy,
+              name: todo.name,
+              status: todo.status,
+              description: todo.description,
+              dueDate: formattedDueDate,
+              importance: importanceMap[todo.importance],
+            };
+          });
+
+          this.todoTemplateContainer.innerHTML = this.todoTemplateCompiled(
+            { todos: formattedTodos },
+            { allowProtoPropertiesByDefault: true }
           );
-        }
-
-        const formattedTodos = filteredTodos.map((todo) => {
-          const formattedDueDate = todo.dueDate
-            ? formatDate(new Date(todo.dueDate))
-            : '';
-
-          return {
-            id: todo.id,
-            createdBy: todo.createdBy,
-            name: todo.name,
-            status: todo.status,
-            description: todo.description,
-            dueDate: formattedDueDate,
-            importance: importanceMap[todo.importance],
-          };
+        })
+        .catch((error) => {
+          console.error('Fehler beim Abrufen der Todos:', error);
         });
-
-        this.todoTemplateContainer.innerHTML = this.todoTemplateCompiled(
-          { todos: formattedTodos },
-          { allowProtoPropertiesByDefault: true }
-        );
-      })
-      .catch((error) => {
-        console.error('Fehler beim Abrufen der Todos:', error);
-      });
+    }
   }
 
   initialize() {

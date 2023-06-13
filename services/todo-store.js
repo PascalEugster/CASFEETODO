@@ -5,7 +5,7 @@ export default class Todo {
     this.id = id;
     this.createdBy = createdBy;
     this.name = name || 'unknown';
-    this.status = status || 0;
+    this.status = status || false;
     this.description = description || '';
     this.importance = importance;
     this.creationDate = new Date();
@@ -81,7 +81,7 @@ export class TodoStore {
     return this.db.findOne({ id: id, createdBy: currentUser });
   }
 
-  async getTodos(currentUser, sortMethod, sortOrder) {
+  async getTodos(currentUser, sortMethod, sortOrder, filterStatus) {
     const sortOptions = {
       name: { key: 'name', compareFn: this.compareByName },
       dueDate: { key: 'dueDate', compareFn: this.compareByDueDate },
@@ -95,6 +95,12 @@ export class TodoStore {
 
     const sortOption = sortOptions[sortMethod];
     if (!sortOption) {
+      if (filterStatus === true) {
+        return this.db
+          .find({ createdBy: currentUser, status: false })
+          .sort({})
+          .exec();
+      }
       return this.db.find({ createdBy: currentUser }).sort({}).exec();
     }
 
@@ -102,6 +108,12 @@ export class TodoStore {
     const sortQuery = {};
     sortQuery[key] = sortOrder === 'asc' ? 1 : -1;
 
+    if (filterStatus === true) {
+      return this.db
+        .find({ createdBy: currentUser, status: false })
+        .sort(sortQuery)
+        .exec();
+    }
     return this.db.find({ createdBy: currentUser }).sort(sortQuery).exec();
   }
 
