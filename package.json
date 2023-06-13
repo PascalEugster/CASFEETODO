@@ -1,8 +1,8 @@
 {
-  "name": "cas-fee-projekt-1-starter-template",
+  "name": "CAS-FEE-Simple-TODO",
   "version": "1.0.0",
-  "description": "Testat template",
-  "main": "public/scripts/main.js",
+  "description": "",
+  "main": "index.js",
   "type": "module",
   "scripts": {
     "start": "node index.js",
@@ -12,7 +12,7 @@
     "eslint": "eslint \"**/*.js\"",
     "all": "npm run stylelint && npm run w3c  && npm run eslint  && node -e \"console.log('npm run all completed')\""
   },
-  "author": "Michael Gfeller",
+  "author": "Eugster Pascal",
   "license": "ISC",
   "devDependencies": {
     "eslint": "^8.14.0",
@@ -25,6 +25,11 @@
     "stylelint-config-standard": "^25.0.0"
   },
   "dependencies": {
-    "express": "^4.18.0"
+    "body-parser": "^1.20.2",
+    "dotenv": "^16.1.4",
+    "express": "^4.18.0",
+    "express-jwt": "^8.4.1",
+    "jsonwebtoken": "^9.0.0",
+    "nedb-promises": "^6.2.1"
   }
 }

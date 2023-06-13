@@ -1,4 +1,5 @@
 import { todoService } from '../services/todo-service.js';
+import { authService } from '../services/auth-service.js';
 import formatDate from '../helpers/helpers.js';
 
 const buttonTranslations = {
@@ -21,88 +22,18 @@ export default class TodoController {
       document.getElementById('todo-list').innerHTML
     );
     this.filterStatus = false;
-    this.currentSortBy = 'name';
+    this.sortMethod = 'name';
+    this.sortStatus = 'asc';
     this.saveButton = document.getElementById('saveButton');
     this.saveAndBackButton = document.getElementById('saveAndBackButton');
     this.filterStatusButton = document.getElementById('filterStatusButton');
+    this.loginButton = document.getElementById('loginButton');
+    this.logoutButton = document.getElementById('logoutButton');
 
     this.todoTemplateContainer = document.getElementById('todo-container');
     this.editTodoContainer = document.getElementById('edit-todo-container');
     this.todoContainer = document.getElementById('todo-container');
     this.loadTodoTemplate();
-  }
-
-  sortTodos(sortBy) {
-    const sortStatus = todoService.sortStatus[sortBy];
-
-    let sortedTodos = [];
-
-    switch (sortBy) {
-      case 'name':
-        sortedTodos = todoService.todos.slice().sort((a, b) => {
-          const nameA = a.name.toLowerCase();
-          const nameB = b.name.toLowerCase();
-          if (nameA < nameB) return -1;
-          if (nameA > nameB) return 1;
-          return 0;
-        });
-        break;
-
-      case 'dueDate':
-        sortedTodos = todoService.todos.slice().sort((a, b) => {
-          const dateA = new Date(a.dueDate);
-          const dateB = new Date(b.dueDate);
-          return dateA - dateB;
-        });
-        break;
-
-      case 'creationDate':
-        sortedTodos = todoService.todos.slice().sort((a, b) => {
-          const dateA = new Date(a.createdAt);
-          const dateB = new Date(b.createdAt);
-          return dateA - dateB;
-        });
-        break;
-
-      case 'importance':
-        sortedTodos = todoService.todos
-          .slice()
-          .sort((a, b) => a.importance - b.importance);
-        break;
-
-      case 'status':
-        sortedTodos = todoService.todos
-          .slice()
-          .sort((a, b) => a.status - b.status);
-
-        break;
-
-      default:
-        sortedTodos = todoService.todos;
-        break;
-    }
-
-    const sortButtons = document.querySelectorAll('.sortButtons button');
-    sortButtons.forEach((button) => {
-      const sortButton = button;
-      const buttonSortBy = button.getAttribute('data-sort');
-      if (buttonSortBy !== sortBy) {
-        sortButton.innerHTML = this.translateButton(button.id);
-      }
-    });
-
-    const selectedButton = document.querySelector(
-      `.sortButtons button[data-sort="${sortBy}"]`
-    );
-    const buttonName = this.translateButton(selectedButton.id);
-    if (sortStatus === 'ascending') {
-      selectedButton.innerHTML = `${buttonName} ▲`;
-    } else {
-      this.sortedTodos = sortedTodos.reverse();
-      selectedButton.innerHTML = `${buttonName} ▼`;
-    }
-    this.currentSortBy = sortBy;
-    return sortedTodos;
   }
 
   translateButton(buttonId) {
@@ -115,20 +46,32 @@ export default class TodoController {
       this.setFilterStatus.bind(this)
     );
 
+    // Auth Service
+    this.loginButton.addEventListener('click', () => {
+      authService
+        .login('admin@admin.ch', '123456')
+        .then(() => {
+          this.updateStatus();
+        })
+        .catch((error) => {
+          // eslint-disable-next-line no-console
+          console.error('Fehler beim Einloggen:', error);
+        });
+    });
+
+    this.logoutButton.addEventListener('click', () => {
+      authService.logout();
+      this.updateStatus();
+    });
+
     const sortButtons = document.querySelectorAll('.sortButtons button');
     sortButtons.forEach((button) => {
       const sortMethod = button.getAttribute('data-sort');
       button.addEventListener('click', () => {
         this.currentSortBy = sortMethod;
-
-        const sortStatus = todoService.sortStatus[sortMethod];
-
-        if (sortStatus === 'ascending') {
-          todoService.sortStatus[sortMethod] = 'descending';
-        } else {
-          todoService.sortStatus[sortMethod] = 'ascending';
-        }
-
+        this.sortMethod = sortMethod;
+        this.sortStatus = todoService.setSortStatus(sortMethod);
+        this.refreshSortButtons();
         this.renderTodoView();
       });
     });
@@ -148,6 +91,40 @@ export default class TodoController {
     createTodoButton.addEventListener('click', () => {
       this.showTodoForm();
     });
+  }
+
+  refreshSortButtons() {
+    const sortButtons = document.querySelectorAll('.sortButtons button');
+    sortButtons.forEach((button) => {
+      const sortButton = button;
+      const buttonSortBy = button.getAttribute('data-sort');
+      if (buttonSortBy !== this.sortMethod) {
+        sortButton.innerHTML = this.translateButton(button.id);
+      }
+    });
+
+    const selectedButton = document.querySelector(
+      `.sortButtons button[data-sort="${this.sortMethod}"]`
+    );
+    const buttonName = this.translateButton(selectedButton.id);
+    if (this.sortStatus === 'asc') {
+      selectedButton.innerHTML = `${buttonName} ▼`;
+    } else {
+      selectedButton.innerHTML = `${buttonName} ▲`;
+    }
+  }
+
+  updateStatus() {
+    Array.from(document.querySelectorAll('.js-non-user')).forEach((x) =>
+      x.classList.toggle('hidden', authService.isLoggedIn())
+    );
+    Array.from(document.querySelectorAll('.js-user')).forEach((x) =>
+      x.classList.toggle('hidden', !authService.isLoggedIn())
+    );
+
+    if (authService.isLoggedIn()) {
+      this.renderTodoView();
+    }
   }
 
   loadTodoTemplate() {
@@ -212,7 +189,9 @@ export default class TodoController {
         if (todo) {
           nameInput.value = todo.name;
           descriptionInput.value = todo.description;
-          dueDateInput.value = todo.dueDate.toISOString().slice(0, 10);
+          dueDateInput.value = new Date(todo.dueDate)
+            .toISOString()
+            .slice(0, 10);
           importanceInput.value = todo.importance;
         }
       })
@@ -255,35 +234,53 @@ export default class TodoController {
     const dueDate = dueDateInput.value;
     const importance = parseInt(importanceInput.value, 10);
 
-    const createdTodo = todoService.createTodo(
-      name,
-      description,
-      dueDate,
-      importance
-    );
-    this.showTodoForm(createdTodo);
+    todoService
+      .createTodo(name, description, dueDate, importance)
+      .then((createdTodo) => {
+        this.showTodoForm(createdTodo);
+      })
+      .catch((error) => {
+        // eslint-disable-next-line no-console
+        console.error('Fehler beim Erstellen des Todos:', error);
+      });
   }
 
   editTodo(event) {
     const { todoId } = event.target.dataset;
-    const todo = todoService.getTodoById(todoId);
-
-    if (todo) {
-      this.showTodoForm(todo);
-    }
+    todoService
+      .getTodo(todoId)
+      .then((todo) => {
+        this.showTodoForm(todo);
+      })
+      .catch((error) => {
+        // eslint-disable-next-line no-console
+        console.error('Fehler beim Abrufen des Todos:', error);
+      });
   }
 
   toggleTodoStatus(event) {
     const { todoId } = event.target.dataset;
-    const todo = todoService.getTodoById(todoId);
+    todoService
+      .getTodo(todoId)
+      .then((todo) => {
+        if (todo != null) {
+          const updatedStatus = !todo.status;
 
-    if (todo) {
-      const updatedStatus = !todo.status;
-
-      todoService.updateTodoStatus(todoId, updatedStatus);
-
-      this.renderTodoView();
-    }
+          todoService
+            .updateTodoStatus(todoId, updatedStatus)
+            .then(() => {
+              this.renderTodoView();
+            })
+            .catch((error) => {
+              // eslint-disable-next-line no-console
+              console.error('Fehler beim Aktualisieren des Todos:', error);
+            });
+        }
+      })
+      .catch((error) => {
+        // eslint-disable-next-line no-console
+        console.error('Fehler beim Abrufen des Todos:', error);
+      });
   }
 
   updateTodo(todoId) {
@@ -292,16 +289,28 @@ export default class TodoController {
     const dueDateInput = document.getElementById('todo-due-date');
     const importanceInput = document.getElementById('todo-importance');
 
-    const todo = todoService.getTodoById(todoId);
+    const todo = todoService.getTodo(todoId);
 
     todo.name = nameInput.value;
     todo.description = descriptionInput.value;
     todo.dueDate = new Date(dueDateInput.value);
     todo.importance = parseInt(importanceInput.value, 10);
 
-    todoService.updateTodo(todoId, todo);
-
-    this.renderTodoView();
+    todoService
+      .updateTodo(
+        todoId,
+        todo.name,
+        todo.description,
+        todo.dueDate,
+        todo.importance
+      )
+      .then(() => {
+        this.renderTodoView();
+      })
+      .catch((error) => {
+        // eslint-disable-next-line no-console
+        console.error('Fehler beim Aktualisieren des Todos:', error);
+      });
   }
 
   setFilterStatus() {
@@ -315,27 +324,44 @@ export default class TodoController {
   }
 
   renderTodoView() {
-    let filteredTodos = this.sortTodos(this.currentSortBy);
-    if (this.filterStatus) {
-      filteredTodos = filteredTodos.filter(
-        (todo) => todo.status === false || todo.status === 0
-      );
-    }
+    // Rufe die Todos mit Hilfe des todoService ab
+    todoService
+      .getTodos(this.sortMethod, this.sortStatus)
+      .then((todos) => {
+        let filteredTodos = todos;
+        if (this.filterStatus) {
+          filteredTodos = filteredTodos.filter(
+            (todo) => todo.status === false || todo.status === 0
+          );
+        }
 
-    const formattedTodos = filteredTodos.map((todo) => ({
-      ...todo,
-      dueDate: formatDate(todo.dueDate),
-      importance: importanceMap[todo.importance],
-    }));
+        const formattedTodos = filteredTodos.map((todo) => {
+          const formattedDueDate = todo.dueDate
+            ? formatDate(new Date(todo.dueDate))
+            : '';
 
-    this.todoTemplateContainer.innerHTML = this.todoTemplateCompiled(
-      { todos: formattedTodos },
-      { allowProtoPropertiesByDefault: true }
-    );
+          return {
+            id: todo.id,
+            createdBy: todo.createdBy,
+            name: todo.name,
+            status: todo.status,
+            description: todo.description,
+            dueDate: formattedDueDate,
+            importance: importanceMap[todo.importance],
+          };
+        });
+
+        this.todoTemplateContainer.innerHTML = this.todoTemplateCompiled(
+          { todos: formattedTodos },
+          { allowProtoPropertiesByDefault: true }
+        );
+      })
+      .catch((error) => {
+        console.error('Fehler beim Abrufen der Todos:', error);
+      });
   }
 
   initialize() {
-    todoService.loadData();
     this.initEventHandlers();
   }
 }

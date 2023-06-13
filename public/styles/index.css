@@ -20,6 +20,10 @@
   --healty-green: #4caf50;
 }
 
+.hidden {
+  display: none;
+}
+
 * {
   margin: 0;
   padding: 0;

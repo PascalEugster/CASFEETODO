@@ -1,14 +1,20 @@
+import { authService } from '../services/auth-service.js';
+import { themeService } from '../services/theme-service.js';
+
 export default class ThemeController {
   constructor() {
-    this.darkMode = this.getDarkModeFromCookie() || false;
-
-    this.setDarkMode();
+    if (authService.isLoggedIn()) {
+      this.darkMode = this.getDarkMode() || false;
+      this.setDarkMode();
+    }
   }
 
   switchDarkMode() {
-    this.darkMode = !this.darkMode;
-    this.setDarkMode();
-    this.saveDarkModeToCookie();
+    if (authService.isLoggedIn()) {
+      this.darkMode = !this.darkMode;
+      this.setDarkMode();
+      this.saveDarkMode();
+    }
   }
 
   initEventHandlers() {
@@ -33,22 +39,16 @@ export default class ThemeController {
     }
   }
 
-  saveDarkModeToCookie() {
-    document.cookie = `darkMode=${this.darkMode}; expires=Fri, 31 Dec 9999 23:59:59 GMT; path=/`;
+  saveDarkMode() {
+    if (authService.isLoggedIn()) {
+      document.cookie = themeService.setDarkMode(this.darkMode);
+    }
   }
 
-  getDarkModeFromCookie() {
-    let darkMode = false;
-    const cookies = document.cookie.split(';');
-
-    cookies.forEach((cookie) => {
-      const [name, value] = cookie.trim().split('=');
-      if (name === 'darkMode' && value === 'true') {
-        darkMode = true;
-      }
-    });
-
-    return darkMode;
+  getDarkMode() {
+    if (authService.isLoggedIn()) {
+      return themeService.getDarkMode();
+    }
   }
 
   initialize() {
