@@ -63,7 +63,7 @@ export class TodoController {
   deleteTodo = async (req, res) => {
     res.json(
       await todoStore.delete(req.params.id, SecurityUtil.currentUser(req))
-    ); // TODO should return 402 if not ok
+    ); 
   };
 }
 

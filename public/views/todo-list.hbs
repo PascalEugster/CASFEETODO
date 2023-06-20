@@ -2,7 +2,11 @@
   {{#each todos}}
   <div class="todo">
     <div class="todo-details">
-      <h3 class="todo-title">{{name}}</h3>
+      <div class="todo-head">
+        <h3 class="todo-title">{{name}}</h3>
+          <ion-icon name="trash-outline" data-todo-id="{{id}}" data-action="deleteTodo"></ion-icon>
+
+      </div>
       <p class="todo-dueDate">{{dueDate}}</p>
       <p class="todo-importance {{importance}}">Wichtigkeit: {{importance}}</p>
       <p class="todo-description">{{description}}</p>

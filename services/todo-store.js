@@ -70,10 +70,7 @@ export class TodoStore {
   }
 
   async delete(id, currentUser) {
-    await this.db.update(
-      { _id: id, createdBy: currentUser },
-      { $set: { state: 'DELETED' } }
-    );
+    await this.db.remove({ id: id, createdBy: currentUser });
     return this.get(id, currentUser);
   }
 

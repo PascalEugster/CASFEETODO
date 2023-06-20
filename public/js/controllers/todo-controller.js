@@ -62,6 +62,19 @@ export default class TodoController {
         this.editTodo(event);
       }
 
+      if (action === 'deleteTodo') {
+        const { todoId } = event.target.dataset;
+        todoService
+          .deleteTodo(todoId)
+          .then(() => {
+            this.renderTodoView();
+          })
+          .catch((error) => {
+            // eslint-disable-next-line no-console
+            console.error('Fehler beim Löschen des Todos:', error);
+          });
+      }
+
       if (action === 'toggleStatus') {
         this.toggleTodoStatus(event);
       }
