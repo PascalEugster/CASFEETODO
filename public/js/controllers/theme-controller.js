@@ -4,14 +4,18 @@ import { themeService } from '../services/theme-service.js';
 export default class ThemeController {
   constructor() {
     if (authService.isLoggedIn()) {
-      this.darkMode = this.getDarkMode() || false;
+      this.darkMode = this.getDarkMode() || 0;
       this.setDarkMode();
     }
   }
 
   switchDarkMode() {
     if (authService.isLoggedIn()) {
-      this.darkMode = !this.darkMode;
+      if (this.darkMode === 0) {
+        this.darkMode = 1;
+      } else {
+        this.darkMode = 0;
+      }
       this.setDarkMode();
       this.saveDarkMode();
     }

@@ -5,13 +5,7 @@ class ThemeService {
     return httpService.getDarkMode();
   }
 
-  setDarkMode() {
-    let isDarkMode = httpService.getDarkMode();
-    if (isDarkMode === true) {
-      isDarkMode = false;
-    } else {
-      isDarkMode = true;
-    }
+  setDarkMode(isDarkMode) {
     return httpService.setDarkMode(isDarkMode);
   }
 }

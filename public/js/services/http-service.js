@@ -64,7 +64,7 @@ class HttpService {
   }
 
   getDarkMode() {
-    return valueStorage.getItem('darkMode');
+    return valueStorage.getItem('darkMode') || 0;
   }
 }
 
