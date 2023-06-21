@@ -9,12 +9,12 @@ Focus on the real thing let the things holding you off behind.
 
 ## Color Reference
 
-| Color           | Hex       |
-| --------------- | --------- |
-| Indian Red      | #f2545bff |
-| gunmetal        | #19323cff |
-| holy-blue       | #19323cff |
-| healthy-green   | #4caf50    
+| Color         | Hex       |
+| ------------- | --------- |
+| Indian Red    | #f2545bff |
+| gunmetal      | #19323cff |
+| holy-blue     | #19323cff |
+| healthy-green | #4caf50   |
 
 /_ CSS HEX _/
 --indian-red: #f2545bff;
@@ -24,18 +24,6 @@ Focus on the real thing let the things holding you off behind.
 --rose-taupe: #8c5e58ff;
 
 ## Run Locally
-
-Clone the project
-
-```bash
-  git clone https://link-to-project
-```
-
-Go to the project directory
-
-```bash
-  cd my-project
-```
 
 Install dependencies
 
@@ -48,6 +36,8 @@ Start the server
 ```bash
   npm run start
 ```
+
+Or use the already configured .vscode launch.json file to launch localhost against chrome and launch via npm
 
 ## License
 

@@ -165,7 +165,6 @@ export default class TodoController {
         const dueDateInput = document.getElementById('todo-due-date');
         const importanceInput = document.getElementById('todo-importance');
 
-        // Prefill values
         dueDateInput.value = new Date().toISOString().slice(0, 10);
 
         if (todo) {
@@ -308,7 +307,6 @@ export default class TodoController {
   }
 
   renderTodoView() {
-    // Rufe die Todos mit Hilfe des todoService ab
     if (authService.isLoggedIn()) {
       todoService
         .getTodos(this.sortMethod, this.sortStatus, this.filterStatus)
